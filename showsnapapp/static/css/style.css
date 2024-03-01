@@ -1,0 +1,305 @@
+/* Default styles for the top navigation bar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  background-color: #000038;
+}
+
+.top-nav {
+  background-color: #0c0c4f;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 20px;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.nav-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.nav-links li {
+  margin-right: 20px;
+}
+
+.nav-links li:last-child {
+  margin-right: 0;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-family: Arial, sans-serif;
+}
+
+.nav-links li a:hover {
+  text-decoration: underline;
+}
+
+/* Media query for tablets and larger */
+@media only screen and (min-width: 768px) {
+  .nav-links {
+    margin-right: 20px;
+  }
+}
+
+/* Media query for mobile devices */
+@media only screen and (max-width: 767px) {
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .logo {
+    height: 18px;
+    width: 18px;
+    margin-bottom: 10px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+  }
+
+  .nav-links li {
+    margin: 5px 0;
+  }
+}
+
+/* Body style */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Styles for top navigation bar */
+.top-nav {
+  background-color: #00002f;
+  color: white;
+  padding: 10px 20px;
+}
+
+/* Styles for movie slider */
+.movie-slider {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-top: 20px;
+  position: relative;
+  left: calc(50% - 500px); /* Adjust width/2 to half of banner width */
+  right: calc(50% - 500px); /* Adjust width/2 to half of banner width */
+}
+
+.movie-slide {
+  display: inline-block;
+  position: relative;
+  width: 300px;
+  height: auto;
+  margin-right: 20px;
+  animation: moveMovieSlider 20s linear infinite; /* Adjust duration as needed */
+}
+
+.movie-image {
+  width: 100%;
+  height: auto;
+}
+
+.movie-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.movie-overlay:hover {
+  opacity: 1;
+}
+
+.book-now-button {
+  padding: 10px 20px;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.book-now-button:hover {
+  background-color: #ff5722;
+}
+
+/* Animation for movie slider */
+@keyframes moveMovieSlider {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Add styles for film listing section */
+.film-listing {
+  margin-top: 20px;
+}
+
+/* Add styles for film scroll container */
+.film-scroll {
+  max-height: 400px; /* Adjust height as needed */
+  overflow-y: auto;
+}
+
+/* Add styles for film container */
+.film-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  padding-right: 50px;
+}
+/* Add styles for film poster */
+.film-poster {
+  width: 100px; /* Adjust width as needed */
+  height: auto;
+}
+
+/* Add styles for film details */
+.film-details {
+  margin-left: 20px;
+}
+
+/* Add styles for film title */
+.film-title {
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: white;
+}
+
+/* Add styles for film info */
+.film-info {
+  margin: 0;
+}
+
+/* Add styles for book now button */
+.book-now-button2 {
+  margin-left: auto; /* Move button to the right end */
+  padding: 10px 20px;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.book-now-button2:hover {
+  background-color: #ff5722;
+}
+
+/* Add styles for upcoming movies section */
+.upcoming-movies {
+  margin-top: 20px;
+}
+
+.upcoming-movies h2 {
+  margin-bottom: 10px;
+}
+
+/* Add styles for movie scroll container */
+.movie-scroll {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Add styles for movie container */
+.movie-container {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 20px;
+}
+
+/* Add styles for movie poster */
+.movie-poster {
+  width: 150px; /* Adjust width as needed */
+  height: auto;
+}
+
+/* Add styles for movie details */
+.movie-details {
+  margin-top: 10px;
+}
+
+/* Add styles for movie title */
+.movie-title {
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: white;
+}
+
+/* Add styles for movie info */
+.movie-info {
+  margin: 0;
+}
+/* Add styles for movie scroll container */
+.movie-scroll {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Add keyframes for automatic scrolling */
+@keyframes scrollMovies {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Apply animation to movie scroll container */
+.movie-scroll {
+  animation: scrollMovies 20s linear infinite; /* Adjust duration as needed */
+}
+
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  background-color: #00002f;
+}
+
+.footer-links {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-info {
+  font-size: 14px;
+}

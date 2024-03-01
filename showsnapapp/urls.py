@@ -1,0 +1,17 @@
+from django.conf import settings
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls.static import static
+from . import views
+urlpatterns = [
+    path('',views.home),
+    path('login/',views.login,name='login'),
+    path('logout/',views.logout,name='logout'),
+    path('signup/',views.signup,name='signup'),
+    path('home/',views.home,name='home'),
+    path('booking/',views.booking,name='booking'),
+    path('my_account/',views.my_account,name='my_account')
+    #path('home/',views.film_listing,name='home')
+    
+]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

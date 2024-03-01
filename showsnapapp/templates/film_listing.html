@@ -1,0 +1,30 @@
+{% load static %}
+<section class="film-listing">
+ <div class="film-scroll">
+    <!-- Iterate over each screening object -->
+   
+   
+    {% for screening in screenings %}
+    <div class="film-container">
+      <!-- Display film poster -->
+      <img
+        src="{{ screening.screen_movie.poster.url }}"
+        alt="{{ screening.screen_movie.title }} Poster"
+        class="film-poster"
+      />
+      <div class="film-details">
+        <!-- Display film title -->
+        <h3 class="film-title">{{ screening.screen_movie.title }}</h3>
+        <!-- Display language -->
+        <p class="film-info">Language: {{ screening.screen_movie.language }}</p>
+        <!-- Display duration -->
+        <p class="film-info">Duration: {{ screening.screen_movie.duration }} hours</p>
+        <!-- Optionally, display additional fields related to the screening -->
+      </div>
+      <!-- Add any other necessary buttons or links -->
+      <button class="book-now-button2">Book Now</button>
+    </div>
+    {% endfor %}
+  </div> 
+  
+</section>

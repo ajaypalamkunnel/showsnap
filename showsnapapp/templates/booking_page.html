@@ -1,0 +1,144 @@
+
+{% load static %}
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Page</title>
+</head>
+<body>
+    <h1>Booking Details</h1>
+    <p>Movie: {{ screening.screen_movie.title }}</p>
+    <p>Screening Date: {{ screening.screening_date }}</p>
+    <p>Screening Time: {{ screening.screening_starts }}</p>
+    <p>Auditorium: {{ screening.auditorium_tbl }}</p>
+    <p>Amount: {{ screening.amount }}</p>
+    <!-- Add more details as needed -->
+
+    <!-- Display additional details from the related Movie object -->
+    <h2>Movie Details</h2>
+    <p>Title: {{ screening.screen_movie.title }}</p>
+    <p>Release Date: {{ screening.screen_movie.release_date }}</p>
+    <p>Duration: {{ screening.screen_movie.duration }} minutes</p>
+    <p>Genre: {{ screening.screen_movie.genre }}</p>
+    <p>Language: {{ screening.screen_movie.language }}</p>
+    <!-- Add more details as needed -->
+    <h2>Auditorium Details</h2>
+    <p>Auditorium capacity: {{ screening.auditorium_tbl.capacity }}</p>
+    
+</body>
+</html> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seat Selection</title>
+    
+    <link rel="stylesheet" href="{% static 'css/booking_page_styles.css' %}" />
+</head>
+<body>
+    <div class="movie-container">
+        <img
+             src="{{ screening.screen_movie.poster.url }}"
+             alt="{{ screening.screen_movie.title }} Poster"
+             class="film-poster"
+           />
+        <p>Movie: {{ screening.screen_movie.title }}</p>
+        <p>Price: {{ screening.amount}}</p>
+
+        
+        <ul class="showcase">
+          <li>
+            <div class="seat"></div>
+            <small>N/A</small>
+          </li>
+          <li>
+            <div class="seat selected"></div>
+            <small>Selected</small>
+          </li>
+          <li>
+            <div class="seat occupied"></div>
+            <small>Occupied</small>
+          </li>    
+        </ul>
+        
+        <div class="container">
+          <div class="screen"></div>
+          
+          <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+              <div class="seat"></div>
+            </div>
+          
+          <p class="text">
+            You have selected <span id="count">0</span> seats for the total price of Rs. <span id="total">0</span>
+          </p>
+          <button class="button">continue</button>
+        </div>
+      </div>
+      
+      <script src="{% static 'js/booking_page_script.js' %}"></script>
+</body>
+</html>
+
+

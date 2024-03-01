@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <link rel="stylesheet" href="{% static 'css/my_account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style2.css' %}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <div class="logo-container">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+        </div>
+        <div class="user-details">
+            <h2>User Details</h2>
+            <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
+            <p>Email: {{ user.email }}</p>
+        </div>
+        <div class="booking-history">
+            <h2>Booking History</h2>
+             <div class="history">
+                {% for booking in booking_history %}
+                    <div class="booking-row">
+                        <p>{{ booking.movie }}</p>
+                        <p>{{ booking.date }}</p>
+                        <p>{{ booking.seat }}</p>
+                    </div>
+                {% endfor %}
+            </div> 
+        </div>
+    </div>
+</body>
+</html>
