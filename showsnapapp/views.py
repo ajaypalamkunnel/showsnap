@@ -62,6 +62,10 @@ def login(request):
     return render(request, 'login.html')
 
 
+
+
+'''
+
 def signup(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -83,7 +87,7 @@ def signup(request):
                 my_user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
                 print(username)
                 # Attempt to create a new Customer object associated with the user
-                #customer = Customer.objects.create(user=my_user, phone=phone)
+                customer = Customer.objects.create(user=my_user, phone=phone)
                 print("helloo")
                 my_user.save()
                
@@ -99,6 +103,57 @@ def signup(request):
                     messages.error(request, 'An error occurred during signup.')
     
     return render(request, 'signup.html')
+
+'''
+
+
+
+def signup(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        
+        print(username)
+        print(password)
+        # Check if any field is empty
+        if not all([username, password, first_name, last_name, email, phone]):
+            messages.error(request, 'Please fill in all the fields.')
+            return render(request, 'signup.html')
+
+        try:
+            # Check if username or email already exists
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Username already exists.')
+                return render(request, 'signup.html')
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already exists.')
+                return render(request, 'signup.html')
+
+            # Attempt to create a new User object
+            print("Before user object creation")
+            user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+            print("after user object creation")
+            # Attempt to create a new Customer object associated with the user
+            print("Before customer object creation")
+            customer = Customer.objects.create(user=user, phone_number=phone)
+            print("after customer object creation")
+
+            messages.success(request, 'Account created successfully!')
+            # Redirect to the login page
+            return redirect('login')
+                
+        except Exception as e:
+            # Handle specific errors here
+            messages.error(request, 'An error occurred during signup. Please try again.')
+            return render(request, 'signup.html')
+
+    return render(request, 'signup.html')
+
+
 
 def logout(request):
     auth_logout(request)
