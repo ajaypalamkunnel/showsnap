@@ -62,7 +62,10 @@
              <!-- Optionally, display additional fields related to the screening -->
            </div>
            <!-- Add any other necessary buttons or links -->
-           <button class="book-now-button2" onclick="redirectToBooking('{{ screening.id }}')">Book Now</button>
+           
+           <button class="book-now-button2" onclick="redirectToBooking({{ screening.id }})">Book Now</button>
+
+           {% comment %} <p class="film-info">screen id: {{ screening.id  }}</p> {% endcomment %}
 
          </div>
          {% endfor %}
@@ -135,7 +138,11 @@
 
     <script>
       function redirectToBooking(screeningId) {
-        window.location.href = "{% url 'booking' %}?screening_id=" + screeningId;
+        // Show an alert box with the screening ID
+        alert("Screening ID: " + screeningId);
+        
+        // Redirect to the booking page with the screening ID in the URL
+        window.location.href = "{% url 'booking' screening_id=0 %}".replace('0', screeningId);
     }
     
   </script>

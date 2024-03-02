@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Customer,Movie, Screening
+from .models import Customer,Movie, Screening, Seat
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login as auth_login, logout as auth_logout
@@ -104,21 +104,57 @@ def my_account(request):
     
     return render(request, 'my_account.html', {'user_data': user_data})
 
+
 @login_required(login_url='login')
-def booking(request):
+def booking(request, screening_id):
+    screening = Screening.objects.get(pk=screening_id)
+    auditorium = screening.auditorium_tbl  # Get the Auditorium instance
+    seat_layout = generate_seat_layout(auditorium)  # Pass Auditorium instance
+    return render(request, 'booking_page.html', {'screening': screening, 'seat_layout': seat_layout})
+
+def generate_seat_layout(auditorium):
+    # Assuming a simple seat layout with rows and columns
+    # Generate seat layout dynamically based on auditorium capacity
+    seat_layout = []
+    for row in range(auditorium.capacity):
+        seat_row = []
+        for col in range(10):  # Assuming 10 columns
+            seat_name = f'{chr(65 + row)}{col + 1}'  # A1, A2, A3, ...
+            is_booked = Seat.objects.filter(screen=auditorium, row=chr(65 + row), seat_number=col + 1).exists()
+            seat_row.append({'name': seat_name, 'is_booked': is_booked})
+        seat_layout.append(seat_row)
+    return seat_layout
+
+
+def confirm_booking(request):  
+    if request.method == 'POST':
+        selected_seats = request.POST.getlist('selected_seats')
+        total_amount = request.POST.get('total_amount')
+        # Process the booking and payment here
+        return redirect('booking_success')
+    return redirect('home')  # Redirect to home page if not a POST request
+
+
     
-    if 'screening_id' in request.GET:
-        screening_id = request.GET['screening_id']
-        screening = Screening.objects.get(pk=screening_id)
-        return render(request, 'booking_page.html', {'screening': screening})
-    else:
-        # Handle case when screening_id is not provided
-        # Redirect or display an error message
-        pass
     
     
     
-    
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
     
     
 # Create your views here.

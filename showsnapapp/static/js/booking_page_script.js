@@ -1,30 +1,46 @@
-const container = document.querySelector('.container');
-const seats = document.querySelectorAll('.row .seat:not(.occupied)');
+const seats = document.querySelectorAll('.seat');
 const count = document.getElementById('count');
 const total = document.getElementById('total');
-const movieSelect = document.getElementById('movie');
+const selectedSeats = [];
 
-let ticketPrice = +movieSelect.value;
-
-//Update total and count
+// Update total and count
 function updateSelectedCount() {
-  const selectedSeats = document.querySelectorAll('.row .seat.selected');
-  const selectedSeatsCount = selectedSeats.length;
-  count.innerText = selectedSeatsCount;
-  total.innerText = selectedSeatsCount * ticketPrice;
+  count.innerText = selectedSeats.length;
+  let totalPrice = 0;
+  selectedSeats.forEach(seat => {
+    totalPrice += seat.price;
+  });
+  total.innerText = totalPrice;
 }
 
-//Movie Select Event
-movieSelect.addEventListener('change', e => {
-  ticketPrice = +e.target.value;
-  updateSelectedCount();
+// Seat click event
+seats.forEach(seat => {
+  seat.addEventListener('click', () => {
+    if (!seat.classList.contains('occupied')) {
+      seat.classList.toggle('selected');
+      const seatName = seat.dataset.seatName;
+      const price = parseInt(seat.dataset.price);
+      if (seat.classList.contains('selected')) {
+        selectedSeats.push({ name: seatName, price: price });
+      } else {
+        const index = selectedSeats.findIndex(s => s.name === seatName);
+        if (index !== -1) {
+          selectedSeats.splice(index, 1);
+        }
+      }
+      updateSelectedCount();
+      updateSelectedSeatsList();
+    }
+  });
 });
 
-//Seat click event
-container.addEventListener('click', e => {
-  if (e.target.classList.contains('seat') &&
-     !e.target.classList.contains('occupied')) {
-    e.target.classList.toggle('selected');
-  }
-  updateSelectedCount();
-});
+// Update selected seats list
+function updateSelectedSeatsList() {
+  const selectedSeatsList = document.getElementById('selected-seats');
+  selectedSeatsList.innerHTML = '';
+  selectedSeats.forEach(seat => {
+    const li = document.createElement('li');
+    li.textContent = `Seat: ${seat.name}, Amount: ${seat.price}`;
+    selectedSeatsList.appendChild(li);
+  });
+}

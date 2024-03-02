@@ -19,6 +19,66 @@ body {
   box-sizing: border-box;
 }
 
+
+
+
+
+
+
+/* Add this CSS to your existing stylesheet */
+
+.seat {
+  background-color: #6c757d; /* Default color for available seats */
+  height: 50px; /* Increase seat button height */
+  width: 50px; /* Increase seat button width */
+  margin: 10px; /* Increase space between seats */
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sample-booked {
+  background-color: #dc3545; /* Color for booked seats */
+}
+
+.sample-available {
+  background-color: #28a745; /* Color for available seats */
+}
+
+.selected {
+  background-color: #007bff; /* Color for selected seats */
+}
+
+.occupied {
+  background-color: #fff; /* Color for booked seats */
+  cursor: not-allowed;
+}
+
+.seat:hover:not(.occupied) {
+  transform: translateY(-5px); /* Elevate the button when hovered */
+}
+
+.disabled {
+  pointer-events: none; /* Disable clicking on booked seats */
+}
+
+.ticket-info {
+  color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
 .movie-container {
   margin: 20px 0px;
   display: flex;
@@ -113,6 +173,10 @@ body {
   margin-left: 19px;
 }
 
+.ticket-info{
+  color: white;
+}
+
 .row {
   display: flex;
   align-items: center;
@@ -149,3 +213,28 @@ p.text span {
   width: 170px;
   color: white;
 }
+
+
+/* Add this CSS to your existing stylesheet */
+
+.seat {
+  background-color: #6c757d; /* Default color for available seats */
+  height: 30px; /* Increase seat button height */
+  width: 30px; /* Increase seat button width */
+  margin: 10px; /* Increase space between seats */
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected {
+  background-color: #007bff; /* Color for selected seats */
+  cursor: pointer;
+}
+
+.occupied {
+  background-color: #dc3545; /* Color for booked seats */
+  cursor: not-allowed;
+}
+

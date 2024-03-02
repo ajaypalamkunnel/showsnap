@@ -1,153 +1,65 @@
 {% load static %} 
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seat Selection</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/style2.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/booking_page_styles.css' %}" />
-  </head>
- 
-  <body>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style2.css' %}">
+    <link rel="stylesheet" href="{% static 'css/booking_page_styles.css' %}">
+</head>
+<body>
     {% include 'navbar.html' %}
     {% block content %}
-    <div class="movie-container">
-      
-     
-      <div class="movie-details-container">
-        <img
-        src="{{ screening.screen_movie.poster.url }}"
-        alt="{{ screening.screen_movie.title }} Poster"
-        class="film-poster"
-      />
-        <p>Movie: {{ screening.screen_movie.title }}</p>
-        <p>Price: {{ screening.amount}}</p>
-        <p class="film-info">screening Date: {{ screening.screening_date }}</p>
-        <p class="film-info">Show: {{ screening.screening_starts }}</p>
-        <p class="film-info">screen: {{ screening.auditorium_tbl }}</p>
-      </div>
-
-      
-      <div class="container">
-        <div class="screen"></div>
-
-        <div class="row">
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
+    <div class="container">
+        <h2>Seat Selection</h2>
+        <div class="movie-details-container">
+            <img src="{{ screening.screen_movie.poster.url }}" alt="{{ screening.screen_movie.title }} Poster" class="film-poster">
+            <p>Movie: {{ screening.screen_movie.title }}</p>
+            <p>Price: {{ screening.amount }}</p>
+            <p>Screening Date: {{ screening.screening_date }}</p>
+            <p>Show Time: {{ screening.screening_starts }}</p>
+            <p>Auditorium: {{ screening.auditorium_tbl.name }}</p>
+            <p>Capacity: {{ screening.auditorium_tbl.capacity }}</p>
         </div>
-        <div class="row">
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat occupied"></div>
-          <div class="seat occupied"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
+        <div class="screen">
+            <h3>Screen</h3>
         </div>
-        <div class="row">
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat occupied"></div>
-          <div class="seat occupied"></div>
-        </div>
-        <div class="row">
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-        </div>
-        <div class="row">
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat occupied"></div>
-          <div class="seat occupied"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-        </div>
-        <div class="row">
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat"></div>
-          <div class="seat occupied"></div>
-          <div class="seat occupied"></div>
-          <div class="seat occupied"></div>
-          <div class="seat"></div>
-        </div>
+            <!-- Generate seat layout dynamically -->
+            <div class="seat-layout">
+                <div class="row">
+                    <div class="seat sample-booked" disabled></div>
+                    <div class="seat sample-available"></div>
+                </div>
+                {% for row in seat_layout %}
+                {% if row.number <= screening.auditorium_tbl.capacity %}
+                <div class="row" style="margin-top: 50px;">
+                    {% for seat in row %}
+                    {% if seat.is_booked %}
+                    <div class="seat occupied" disabled>{{ seat.name }}</div>
+                    {% else %}
+                    <div class="seat available" onclick="selectSeat('{{ seat.name }}', {{ seat.price }})">{{ seat.name }}</div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
         
-        <p class="text">
-          You have selected <span id="count">0</span> seats for the total price
-          of Rs. <span id="total">0</span>
-        </p>
-        <ul class="showcase">
-          <li>
-            <div class="seat"></div>
-            <small>N/A</small>
-          </li>
-          <li>
-            <div class="seat selected"></div>
-            <small>Selected</small>
-          </li>
-          <li>
-            <div class="seat occupied">
-            <small>Occupied</small>
-          </li>
-        </ul> 
-        <button class="button">continue</button>
-      </div>
+        <div class="ticket-info">
+            <h3>Selected Seats</h3>
+            <ul id="selected-seats"></ul>
+            <p>Total Amount: <span id="total-amount">0</span></p>
+            <form id="booking-form" method="post" action="{% url 'confirm_booking' %}">
+                {% csrf_token %}
+                <input type="hidden" name="selected_seats" id="selected-seats-input">
+                <input type="hidden" name="total_amount" id="total-amount-input">
+                <button type="submit" class="button">Confirm Booking</button>
+            </form>
+        </div>
     </div>
+    <script src="{% static 'js/seat_selection.js' %}"></script>
     {% endblock %}
-    <script src="{% static 'js/booking_page_script.js' %}"></script>
-  </body>
+</body>
 </html>
-
-
-{% comment %} <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Booking Page</title>
-  </head>
-  <body>
-    <h1>Booking Details</h1>
-    <p>Movie: {{ screening.screen_movie.title }}</p>
-    <p>Screening Date: {{ screening.screening_date }}</p>
-    <p>Screening Time: {{ screening.screening_starts }}</p>
-    <p>Auditorium: {{ screening.auditorium_tbl }}</p>
-    <p>Amount: {{ screening.amount }}</p>
-    <!-- Add more details as needed -->
-
-    <!-- Display additional details from the related Movie object -->
-    <h2>Movie Details</h2>
-    <p>Title: {{ screening.screen_movie.title }}</p>
-    <p>Release Date: {{ screening.screen_movie.release_date }}</p>
-    <p>Duration: {{ screening.screen_movie.duration }} minutes</p>
-    <p>Genre: {{ screening.screen_movie.genre }}</p>
-    <p>Language: {{ screening.screen_movie.language }}</p>
-    <!-- Add more details as needed -->
-    <h2>Auditorium Details</h2>
-    <p>Auditorium capacity: {{ screening.auditorium_tbl.capacity }}</p>
-  </body>
-</html>
-{% endcomment %}
