@@ -7,23 +7,6 @@ from .models import Customer
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
-
-
-# def home(request):
-#     # Fetch movies, for example, let's assume we want to display released movies
-#     released_movies = Movie.objects.filter(status='released')
-    
-    
-#     return render(request, 'home.html', {'released_movies': released_movies})
-
-# def film_listing(request):
-#     # Retrieve all screenings with related movie data using select_related
-#     screenings = Screening.objects.select_related('screen_movie').all()
-
-#     # Render the template with the screenings data
-#     print("film",screenings.screen_movie.title)
-#     return render(request, 'film_listing.html', {'screenings': screenings})
 
 
 def home(request):
@@ -61,50 +44,6 @@ def login(request):
     
     return render(request, 'login.html')
 
-
-
-
-'''
-
-def signup(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-        phone = request.POST['phone']
-        
-        # Check if any field is empty
-        if not all([username, password, first_name, last_name, email, phone]):
-            messages.error(request, 'Please fill in all the fields.')
-        else:
-            try:
-                # Attempt to create a new User object
-                print("checking")
-                print(username)
-                print(password)
-                my_user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-                print(username)
-                # Attempt to create a new Customer object associated with the user
-                customer = Customer.objects.create(user=my_user, phone=phone)
-                print("helloo")
-                my_user.save()
-               
-                messages.success(request, 'Account created successfully!')
-                # Redirect to the login page
-                return redirect('login')
-                
-            except Exception as e:
-                # Handle specific errors here
-                if 'unique constraint' in str(e).lower():
-                    messages.error(request, 'Username or email already exists.')
-                else:
-                    messages.error(request, 'An error occurred during signup.')
-    
-    return render(request, 'signup.html')
-
-'''
 
 
 
@@ -176,3 +115,72 @@ def booking(request):
         # Handle case when screening_id is not provided
         # Redirect or display an error message
         pass
+    
+    
+    
+    
+    
+    
+# Create your views here.
+
+
+# def home(request):
+#     # Fetch movies, for example, let's assume we want to display released movies
+#     released_movies = Movie.objects.filter(status='released')
+    
+    
+#     return render(request, 'home.html', {'released_movies': released_movies})
+
+# def film_listing(request):
+#     # Retrieve all screenings with related movie data using select_related
+#     screenings = Screening.objects.select_related('screen_movie').all()
+
+#     # Render the template with the screenings data
+#     print("film",screenings.screen_movie.title)
+#     return render(request, 'film_listing.html', {'screenings': screenings})
+
+
+
+
+'''
+
+def signup(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        
+        # Check if any field is empty
+        if not all([username, password, first_name, last_name, email, phone]):
+            messages.error(request, 'Please fill in all the fields.')
+        else:
+            try:
+                # Attempt to create a new User object
+                print("checking")
+                print(username)
+                print(password)
+                my_user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+                print(username)
+                # Attempt to create a new Customer object associated with the user
+                customer = Customer.objects.create(user=my_user, phone=phone)
+                print("helloo")
+                my_user.save()
+               
+                messages.success(request, 'Account created successfully!')
+                # Redirect to the login page
+                return redirect('login')
+                
+            except Exception as e:
+                # Handle specific errors here
+                if 'unique constraint' in str(e).lower():
+                    messages.error(request, 'Username or email already exists.')
+                else:
+                    messages.error(request, 'An error occurred during signup.')
+    
+    return render(request, 'signup.html')
+
+'''
+

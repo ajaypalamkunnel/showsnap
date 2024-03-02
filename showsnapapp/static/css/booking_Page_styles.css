@@ -24,7 +24,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column
+  flex-direction: row
 }
 .film-poster{
     height: 150px;
@@ -40,10 +40,17 @@ body {
   font-size: 14px;
   border-radius: 5px;
 }
-
+.movie-details-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 40px;
+  width: 100%;
+}
 .container {
   perspective: 1000px;
-  margin: 40px 0;
+  margin: 7px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -89,7 +96,7 @@ body {
   display: flex;
   justify-content: space-between;
   list-style-type: none;
-  background: rgba(0,0,0,0.1);
+  background: rgba(88, 12, 12, 0.1);
   padding: 5px 10px;
   border-radius: 5px;
   color: #777;
@@ -103,7 +110,7 @@ body {
 }
 
 .showcase li small {
-  margin-left: 2px;
+  margin-left: 19px;
 }
 
 .row {
@@ -116,7 +123,7 @@ body {
   background: #e5d7d7;
   height: 70px;
   width: 70%;
-  margin: 15px 0;
+  margin: 30px;
   transform: rotateX(-45deg);
   box-shadow: 0 3px 10px rgba(255,255,255,0.7);
 }
@@ -136,9 +143,9 @@ p.text span {
 }
 
 .button{
-    background-color: rgb(51, 186, 51);
-    border: 0;
-    border-radius: 20px;
-    width: 170px;
-    color: white;
+  background-color: rgb(69, 189, 69);
+  border: 0;
+  border-radius: 20px;
+  width: 170px;
+  color: white;
 }

@@ -61,7 +61,7 @@ class Customer(models.Model):
     phone_number = models.CharField(max_length=20)
 
     def __str__(self):
-        return f"{self.username} ({self.first_name} {self.last_name})"
+        return f"{self.user.username} ({self.user.first_name} {self.user.last_name})"
 
 
 
