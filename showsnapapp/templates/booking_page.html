@@ -34,7 +34,7 @@
                         {% if seat.is_booked %}
                             <div class="seat booked" disabled>{{ seat.name }}</div>
                         {% else %}
-                            <div class="seat available" onclick="selectSeat('{{ seat.name }}', {{ seat.price }})">{{ seat.name }}</div>
+                        <div class="seat available" onclick="selectSeat('{{ seat.name }}', {{ screening.amount }})">{{ seat.name }}</div>
                         {% endif %}
                     {% endfor %}
                 </div>

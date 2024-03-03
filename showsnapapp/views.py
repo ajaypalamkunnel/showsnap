@@ -147,8 +147,6 @@ def generate_seat_layout(screening):
 
 
 
-
-
 def confirm_booking(request):  
     if request.method == 'POST':
         selected_seats = request.POST.getlist('selected_seats')
