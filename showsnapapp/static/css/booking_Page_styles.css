@@ -19,19 +19,25 @@ body {
   box-sizing: border-box;
 }
 
-
-
-
-
-
-
 /* Add this CSS to your existing stylesheet */
 
+.seat-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
 .seat {
-  background-color: #6c757d; /* Default color for available seats */
-  height: 50px; /* Increase seat button height */
-  width: 50px; /* Increase seat button width */
-  margin: 10px; /* Increase space between seats */
+  background-color: #6c757d;
+  height: 40px;
+  width: 40px;
+  margin: 5px;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -40,40 +46,33 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.sample-booked {
-  background-color: #dc3545; /* Color for booked seats */
+.seat.booked {
+  background-color: #dc3545;
 }
 
-.sample-available {
-  background-color: #28a745; /* Color for available seats */
+.seat.selected {
+  background-color: #007bff;
 }
 
-.selected {
-  background-color: #007bff; /* Color for selected seats */
+.seat:hover:not(.booked) {
+  transform: scale(1.05);
 }
 
-.occupied {
-  background-color: #fff; /* Color for booked seats */
-  cursor: not-allowed;
+.ticket-info {
+  margin-top: 20px;
 }
 
-.seat:hover:not(.occupied) {
-  transform: translateY(-5px); /* Elevate the button when hovered */
+.button {
+  margin-top: 10px;
 }
 
-.disabled {
-  pointer-events: none; /* Disable clicking on booked seats */
-}
+
+
+
 
 .ticket-info {
   color: white;
 }
-
-
-
-
-
-
 
 
 
@@ -118,7 +117,7 @@ body {
 }
 
 .seat {
-  background-color: #444451;
+  background-color: #dc1d9d;
   height: 12px;
   width: 15px;
   margin: 3px;
@@ -126,75 +125,7 @@ body {
   border-top-right-radius: 10px;
 }
 
-.selected {
-  background-color: #0081cb;
-}
 
-.occupied {
-  background-color: #fff;
-}
-
-.seat:nth-of-type(2) {
-  margin-right: 18px;
-}
-
-.seat:nth-last-of-type(2) {
-  margin-left: 18px;
-}
-
-.seat:not(.occupied):hover {
-  cursor: pointer;
-  transform: scale(1.2);
-}
-
-.showcase .seat:not(.occupied):hover {
-  cursor: default;
-  transform: scale(1);
-}
-
-.showcase {
-  display: flex;
-  justify-content: space-between;
-  list-style-type: none;
-  background: rgba(88, 12, 12, 0.1);
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: #777;
-}
-
-.showcase li {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 10px;
-}
-
-.showcase li small {
-  margin-left: 19px;
-}
-
-.ticket-info{
-  color: white;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.screen {
-  background: #e5d7d7;
-  height: 70px;
-  width: 70%;
-
-  margin: 30px;
-  transform: rotateX(-45deg);
-  box-shadow: 0 3px 10px rgba(255,255,255,0.7);
-}
-h3{
-  color: white;
-}
 
 .button{
   background-color: rgb(46, 151, 46);

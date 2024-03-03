@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Customer,Movie, Screening, Seat
+from .models import Auditorium, Booking, Customer,Movie, Screening, Seat
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login as auth_login, logout as auth_logout
@@ -107,25 +107,43 @@ def my_account(request):
 
 @login_required(login_url='login')
 def booking(request, screening_id):
-    screening = Screening.objects.get(pk=screening_id)
-    auditorium = screening.auditorium_tbl 
-   # Get the Auditorium instance
-    seat_layout = generate_seat_layout(auditorium)  # Pass Auditorium instance
-    return render(request, 'booking_page.html', {'screening': screening, 'seat_layout': seat_layout})
+    try:
+        # Get the screening instance
+        screening = Screening.objects.get(pk=screening_id)
+        # Get the auditorium instance
+        auditorium = screening.auditorium_tbl 
+        # Generate seat layout dynamically based on auditorium capacity and booking status
+        seat_layout = generate_seat_layout(screening)
+        # Pass the screening, seat_layout, and other necessary data to the template
+        return render(request, 'booking_page.html', {'screening': screening, 'seat_layout': seat_layout})
+    except Screening.DoesNotExist:
+        return HttpResponse("Screening not found")
 
-def generate_seat_layout(auditorium):
-    # Assuming a simple seat layout with rows and columns
-    # Generate seat layout dynamically based on auditorium capacity
-    col_range = int(auditorium.capacity/10)
+def generate_seat_layout(screening):
+    # Initialize an empty seat layout
     seat_layout = []
-    for row in range(auditorium.capacity):
-        seat_row = []
-        for col in range(col_range):  # Assuming 10 columns
-            seat_name = f'{chr(65 + row)}{col + 1}'  # A1, A2, A3, ...
-            is_booked = Seat.objects.filter(screen=auditorium, row=chr(65 + row), seat_number=col + 1).exists()
-            seat_row.append({'name': seat_name, 'is_booked': is_booked})
-        seat_layout.append(seat_row)
-    return seat_layout
+    try:
+        # Get the auditorium instance
+        auditorium = screening.auditorium_tbl
+        # Calculate the number of rows needed based on auditorium capacity
+        rows = auditorium.capacity // 10  # Assuming 10 columns per row
+        # Iterate through each row
+        for row in range(rows):
+            seat_row = []
+            # Iterate through each seat in the row
+            for col in range(1, 11):  # Assuming 10 columns per row
+                # Generate the seat name (e.g., A1, A2, B1, B2, etc.)
+                seat_name = f'{chr(65 + row)}{col}'
+                # Check if the seat is booked for the current screening
+                is_booked = Booking.objects.filter(showtime=screening, booked_seats__row=chr(65 + row), booked_seats__seat_number=col).exists()
+                # Append the seat details to the seat_row list
+                seat_row.append({'name': seat_name, 'is_booked': is_booked})
+            # Append the seat_row to the seat_layout list
+            seat_layout.append(seat_row)
+        # Return the generated seat layout
+        return seat_layout
+    except Auditorium.DoesNotExist:
+        return HttpResponse("Auditorium not found")
 
 
 

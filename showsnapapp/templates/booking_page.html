@@ -26,22 +26,20 @@
         <div class="screen">
             <h3>Screen</h3>
         </div>
-            <!-- Generate seat layout dynamically -->
-            
-                {% for row in seat_layout %}
-                {% if row.number <= screening.auditorium_tbl.capacity %}
-                <div class="row" style="margin-top: 50px;">
+        <!-- Generate seat layout dynamically -->
+        <div class="seat-layout">
+            {% for row in seat_layout %}
+                <div class="row">
                     {% for seat in row %}
-                    {% if seat.is_booked %}
-                    <div class="seat occupied" disabled>{{ seat.name }}</div>
-                    {% else %}
-                    <div class="seat available" onclick="selectSeat('{{ seat.name }}', {{ seat.price }})">{{ seat.name }}</div>
-                    {% endif %}
+                        {% if seat.is_booked %}
+                            <div class="seat booked" disabled>{{ seat.name }}</div>
+                        {% else %}
+                            <div class="seat available" onclick="selectSeat('{{ seat.name }}', {{ seat.price }})">{{ seat.name }}</div>
+                        {% endif %}
                     {% endfor %}
                 </div>
-                {% endif %}
-                {% endfor %}
-            </div>
+            {% endfor %}
+        </div>
         
         <div class="ticket-info">
             <h3>Selected Seats</h3>
