@@ -115,11 +115,13 @@ body {
   justify-content: center;
   align-items: center;
 }
-
+.screen h3{
+  color: white;
+}
 .seat {
   background-color: #dc1d9d;
-  height: 12px;
-  width: 15px;
+  height: 30px;
+  width: 30px;
   margin: 3px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
