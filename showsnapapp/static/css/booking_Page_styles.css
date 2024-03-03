@@ -187,27 +187,17 @@ body {
   background: #e5d7d7;
   height: 70px;
   width: 70%;
+
   margin: 30px;
   transform: rotateX(-45deg);
   box-shadow: 0 3px 10px rgba(255,255,255,0.7);
 }
-
-p.text {
-  margin: 40px 0;
-}
-
-p.text span {
-  color: #0081cb;
-  font-weight: 600;
-  box-sizing: content-box;
-}
-
-.credits a {
-  color: #fff;
+h3{
+  color: white;
 }
 
 .button{
-  background-color: rgb(69, 189, 69);
+  background-color: rgb(46, 151, 46);
   border: 0;
   border-radius: 20px;
   width: 170px;
@@ -215,26 +205,5 @@ p.text span {
 }
 
 
-/* Add this CSS to your existing stylesheet */
 
-.seat {
-  background-color: #6c757d; /* Default color for available seats */
-  height: 30px; /* Increase seat button height */
-  width: 30px; /* Increase seat button width */
-  margin: 10px; /* Increase space between seats */
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.selected {
-  background-color: #007bff; /* Color for selected seats */
-  cursor: pointer;
-}
-
-.occupied {
-  background-color: #dc3545; /* Color for booked seats */
-  cursor: not-allowed;
-}
 

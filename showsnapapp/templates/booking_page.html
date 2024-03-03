@@ -27,11 +27,7 @@
             <h3>Screen</h3>
         </div>
             <!-- Generate seat layout dynamically -->
-            <div class="seat-layout">
-                <div class="row">
-                    <div class="seat sample-booked" disabled></div>
-                    <div class="seat sample-available"></div>
-                </div>
+            
                 {% for row in seat_layout %}
                 {% if row.number <= screening.auditorium_tbl.capacity %}
                 <div class="row" style="margin-top: 50px;">
