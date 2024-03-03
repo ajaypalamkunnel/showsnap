@@ -47,8 +47,8 @@
             <p>Total Amount: <span id="total-amount">0</span></p>
             <form id="booking-form" method="post" action="{% url 'confirm_booking' %}">
                 {% csrf_token %}
-                <input type="text" name="selected_seats" id="selected-seats-input">
-                <input type="text" name="total_amount" id="total-amount-input">
+                <input type="text" name="selected_seats" id="selected-seats-input" required>
+                <input type="text" name="total_amount" id="total-amount-input" required>
                 <button type="submit" class="button">Confirm Booking</button>
             </form>
         </div>

@@ -146,13 +146,13 @@ def generate_seat_layout(screening):
         return HttpResponse("Auditorium not found")
 
 
-
+@login_required(login_url='login')
 def confirm_booking(request):  
     if request.method == 'POST':
         selected_seats = request.POST.getlist('selected_seats')
         total_amount = request.POST.get('total_amount')
         # Process the booking and payment here
-        return redirect('booking_success')
+        return render(request,'confirm_booking.html',{'seats':selected_seats ,'amount':total_amount})
     return redirect('home')  # Redirect to home page if not a POST request
 
 
