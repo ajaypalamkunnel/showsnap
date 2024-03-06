@@ -1,18 +1,24 @@
 from django.shortcuts import redirect, render
-from .models import Auditorium, Booking, Customer,Movie, Screening, Seat
+from .models import Auditorium, Booking, Customer, Movie, Screening, Seat
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate,login as auth_login, logout as auth_logout
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .models import Customer
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
+from django.conf import settings
+from instamojo_wrapper import Instamojo
+
+api = Instamojo(api_key=settings.API_KEY ,
+    auth_token=settings.AUTH_TOKEN , endpoint='https://test.instamojo.com/api/1.1/'  
+)
 
 
 def home(request):
     # Fetch released movies
     released_movies = Movie.objects.filter(status='released')
-    
+
     # Retrieve all screenings with related movie data
     screenings = Screening.objects.select_related('screen_movie').all()
 
@@ -20,31 +26,28 @@ def home(request):
     return render(request, 'home.html', {'released_movies': released_movies, 'screenings': screenings})
 
 
-
 def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
-        print("Username:", username)  
-        print("Password:", password) 
-        
+
+        print("Username:", username)
+        print("Password:", password)
+
         # Authenticate the user
         user = authenticate(request, username=username, password=password)
-        
-        print("Authenticated User:", user)  
-        
+
+        print("Authenticated User:", user)
+
         if user:
             auth_login(request, user)
             return redirect('home')
         else:
-            
+
             print("Authentication failed: Invalid username or password")
-            return HttpResponse('<script>alert("Invalid username or password"); window.location.href = "/login/";</script>')  
-    
+            return HttpResponse('<script>alert("Invalid username or password"); window.location.href = "/login/";</script>')
+
     return render(request, 'login.html')
-
-
 
 
 def signup(request):
@@ -55,7 +58,7 @@ def signup(request):
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
-        
+
         print(username)
         print(password)
         # Check if any field is empty
@@ -74,7 +77,8 @@ def signup(request):
 
             # Attempt to create a new User object
             print("Before user object creation")
-            user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+            user = User.objects.create_user(
+                username=username, password=password, email=email, first_name=first_name, last_name=last_name)
             print("after user object creation")
             # Attempt to create a new Customer object associated with the user
             print("Before customer object creation")
@@ -84,24 +88,25 @@ def signup(request):
             messages.success(request, 'Account created successfully!')
             # Redirect to the login page
             return redirect('login')
-                
+
         except Exception as e:
             # Handle specific errors here
-            messages.error(request, 'An error occurred during signup. Please try again.')
+            messages.error(
+                request, 'An error occurred during signup. Please try again.')
             return render(request, 'signup.html')
 
     return render(request, 'signup.html')
-
 
 
 def logout(request):
     auth_logout(request)
     return redirect('login')
 
+
 def my_account(request):
     # Fetch data from the User table
     user_data = User.objects.get(pk=request.user.id)
-    
+
     return render(request, 'my_account.html', {'user_data': user_data})
 
 
@@ -111,13 +116,14 @@ def booking(request, screening_id):
         # Get the screening instance
         screening = Screening.objects.get(pk=screening_id)
         # Get the auditorium instance
-        auditorium = screening.auditorium_tbl 
+        auditorium = screening.auditorium_tbl
         # Generate seat layout dynamically based on auditorium capacity and booking status
         seat_layout = generate_seat_layout(screening)
         # Pass the screening, seat_layout, and other necessary data to the template
         return render(request, 'booking_page.html', {'screening': screening, 'seat_layout': seat_layout})
     except Screening.DoesNotExist:
         return HttpResponse("Screening not found")
+
 
 def generate_seat_layout(screening):
     # Initialize an empty seat layout
@@ -135,7 +141,8 @@ def generate_seat_layout(screening):
                 # Generate the seat name (e.g., A1, A2, B1, B2, etc.)
                 seat_name = f'{chr(65 + row)}{col}'
                 # Check if the seat is booked for the current screening
-                is_booked = Booking.objects.filter(showtime=screening, booked_seats__row=chr(65 + row), booked_seats__seat_number=col).exists()
+                is_booked = Booking.objects.filter(showtime=screening, booked_seats__row=chr(
+                    65 + row), booked_seats__seat_number=col).exists()
                 # Append the seat details to the seat_row list
                 seat_row.append({'name': seat_name, 'is_booked': is_booked})
             # Append the seat_row to the seat_layout list
@@ -147,45 +154,34 @@ def generate_seat_layout(screening):
 
 
 @login_required(login_url='login')
-def confirm_booking(request):  
+def confirm_booking(request):
     if request.method == 'POST':
         selected_seats = request.POST.getlist('selected_seats')
         total_amount = request.POST.get('total_amount')
         # Process the booking and payment here
-        return render(request,'confirm_booking.html',{'seats':selected_seats ,'amount':total_amount})
+        
+        response = api.payment_request_create(
+            amount=total_amount,
+            purpose="ticket payment",
+            buyer_name="ajay",
+            email = "ajay@gmail.com",
+            redirect_url='http://127.0.0.1:8000/confirm_booking/'
+        )
+        print(response)
+
+        print(selected_seats,total_amount)
+        return render(request, 'confirm_booking.html', {'seats': selected_seats, 'amount': total_amount})
     return redirect('home')  # Redirect to home page if not a POST request
 
 
-    
-    
-    
-    
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-    
-    
 # Create your views here.
 
 
 # def home(request):
 #     # Fetch movies, for example, let's assume we want to display released movies
 #     released_movies = Movie.objects.filter(status='released')
-    
-    
+
+
 #     return render(request, 'home.html', {'released_movies': released_movies})
 
 # def film_listing(request):
@@ -195,8 +191,6 @@ def confirm_booking(request):
 #     # Render the template with the screenings data
 #     print("film",screenings.screen_movie.title)
 #     return render(request, 'film_listing.html', {'screenings': screenings})
-
-
 
 
 '''
@@ -240,4 +234,3 @@ def signup(request):
     return render(request, 'signup.html')
 
 '''
-
