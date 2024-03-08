@@ -1,3 +1,4 @@
+from urllib.parse import urlencode
 from django.shortcuts import redirect, render
 from .models import Auditorium, Booking, Customer, Movie, Screening, Seat
 from django.contrib.auth.models import User
@@ -176,7 +177,16 @@ def confirm_booking(request):
                 purpose="ticket payment",
                 buyer_name="ajay",
                 email="ajay@gmail.com",
-                redirect_url='http://127.0.0.1:8000/payment_success/'
+                redirect_url='http://127.0.0.1:8000/payment_success/?' + urlencode({
+                    'booking_id': booking_id,
+                    'total_amount': total_amount,
+                    'screening_date': screening_date,
+                    'movie_title': movie_title,
+                    'price': price,
+                    'show_time': show_time,
+                    'auditorium': auditorium,
+                    'selected_seats': ','.join(selected_seats),
+                })
             )
 
             payment_id = response['payment_request']['id']
@@ -201,10 +211,30 @@ def confirm_booking(request):
 
 @login_required(login_url='login')
 def payment_success(request):
-    
-    
-    
-    return render(request, 'payment_success.html')
+    booking_id = request.GET.get('booking_id')
+    total_amount = request.GET.get('total_amount')
+    screening_date = request.GET.get('screening_date')
+    movie_title = request.GET.get('movie_title')
+    price = request.GET.get('price')
+    show_time = request.GET.get('show_time')
+    auditorium = request.GET.get('auditorium')
+    selected_seats = request.GET.get('selected_seats').split(',')
+
+    print(booking_id, total_amount, screening_date, movie_title,
+          price, show_time, auditorium, selected_seats)
+
+    # Process payment success logic with booking data
+    # For example, save the booking details to the database or display a success message
+    return render(request, 'payment_success.html', {
+        'booking_id': booking_id,
+        'total_amount': total_amount,
+        'screening_date': screening_date,
+        'movie_title': movie_title,
+        'price': price,
+        'show_time': show_time,
+        'auditorium': auditorium,
+        'selected_seats': selected_seats,
+    })
 
 
 # Create your views here.
