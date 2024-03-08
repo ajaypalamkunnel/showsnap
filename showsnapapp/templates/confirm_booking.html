@@ -1,5 +1,27 @@
 {% load static %} 
-<h1>Booking confirmation</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking confirmation</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/confirm_booking.css' %}">
+</head>
+<body>
+    <div class="booking-container">
+        <h1>Booking confirmation</h1>
 
-<h4>Booking confirmation: {{seats}}</h4>
-<h4>Total amount: {{amount}}</h4>
+        <div class="confirmation-details">
+            <p>Movie: {{ movie }}</p>
+            <p>Price: {{ price }}</p>
+            <p>Screening Date: {{ screening_date }}</p>
+            <p>Show Time: {{ show_time }}</p>
+            <p>Auditorium: {{ auditorium }}</p>
+            <h4>Booking confirmation: {{ seats }}</h4>
+            <h4>Total amount: {{ amount }}</h4>
+            {% comment %} <h4>Payment URL: {{ payment_url }}</h4> {% endcomment %}
+            <a href="{{ payment_url }}" class="payment-button">Pay Now</a>
+        </div>
+    </div>
+</body>
+</html>

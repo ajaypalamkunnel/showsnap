@@ -6,13 +6,13 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .models import Customer
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-
+import uuid
 from django.conf import settings
 from instamojo_wrapper import Instamojo
 
-api = Instamojo(api_key=settings.API_KEY ,
-    auth_token=settings.AUTH_TOKEN , endpoint='https://test.instamojo.com/api/1.1/'  
-)
+api = Instamojo(api_key=settings.API_KEY,
+                auth_token=settings.AUTH_TOKEN, endpoint='https://test.instamojo.com/api/1.1/'
+                )
 
 
 def home(request):
@@ -153,46 +153,71 @@ def generate_seat_layout(screening):
         return HttpResponse("Auditorium not found")
 
 
+def generate_booking_id():
+    return str(uuid.uuid4())[:5].upper()
+
+
 @login_required(login_url='login')
 def confirm_booking(request):
     if request.method == 'POST':
-        selected_seats = request.POST.getlist('selected_seats')
-        total_amount = request.POST.get('total_amount')
-        # Process the booking and payment here
-        
-        response = api.payment_request_create(
-            amount=total_amount,
-            purpose="ticket payment",
-            buyer_name="ajay",
-            email = "ajay@gmail.com",
-            redirect_url='http://127.0.0.1:8000/confirm_booking/'
-        )
-        print(response)
+        try:
+            selected_seats = request.POST.getlist('selected_seats')
+            total_amount = request.POST.get('total_amount')
+            screening_date = request.POST.get('screening_date')
+            movie_title = request.POST.get('movie_title')
+            price = request.POST.get('price')
+            booking_id = generate_booking_id()
+            show_time = request.POST.get('show_time')
+            auditorium = request.POST.get('auditorium')
 
-        print(selected_seats,total_amount)
-        return render(request, 'confirm_booking.html', {'seats': selected_seats, 'amount': total_amount})
+            # Process the booking and payment here
+            response = api.payment_request_create(
+                amount=total_amount,
+                purpose="ticket payment",
+                buyer_name="ajay",
+                email="ajay@gmail.com",
+                redirect_url='http://127.0.0.1:8000/payment_success/'
+            )
+
+            payment_id = response['payment_request']['id']
+
+            # Render the confirm_booking.html template with relevant data
+            return render(request, 'confirm_booking.html', {'seats': selected_seats,
+                                                            'amount': total_amount, 'movie': movie_title,
+                                                            'screening_date': screening_date, 'price': price,
+                                                            'show_time': show_time, 'auditorium': auditorium,
+                                                            'booking_id': booking_id, 'payment_id': payment_id,
+                                                            'payment_url': response['payment_request']['longurl']})
+
+        except Exception as e:
+            # Log the error or handle it appropriately
+            print(f"An error occurred during booking: {str(e)}")
+            # Render an error page or redirect to an appropriate URL
+            return render(request, 'error.html', {'error_message': 'An error occurred during booking. Please try again later.'})
+
+    # If request method is not POST, redirect to the home page
     return redirect('home')  # Redirect to home page if not a POST request
 
 
+@login_required(login_url='login')
+def payment_success(request):
+    
+    
+    
+    return render(request, 'payment_success.html')
+
+
 # Create your views here.
-
-
 # def home(request):
 #     # Fetch movies, for example, let's assume we want to display released movies
 #     released_movies = Movie.objects.filter(status='released')
-
-
 #     return render(request, 'home.html', {'released_movies': released_movies})
-
 # def film_listing(request):
 #     # Retrieve all screenings with related movie data using select_related
 #     screenings = Screening.objects.select_related('screen_movie').all()
-
 #     # Render the template with the screenings data
 #     print("film",screenings.screen_movie.title)
 #     return render(request, 'film_listing.html', {'screenings': screenings})
-
-
 '''
 
 def signup(request):

@@ -11,7 +11,8 @@ urlpatterns = [
     path('home/',views.home,name='home'),
     path('booking/<int:screening_id>/', views.booking, name='booking'),
     path('my_account/',views.my_account,name='my_account'),
-    path('confirm_booking/', views.confirm_booking, name='confirm_booking')
+    path('confirm_booking/', views.confirm_booking, name='confirm_booking'),
+    path('payment_success/',views.payment_success,name='payment_success')
     #path('home/',views.film_listing,name='home')
     
 ]

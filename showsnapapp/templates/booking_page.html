@@ -47,6 +47,11 @@
             <p>Total Amount: <span id="total-amount">0</span></p>
             <form id="booking-form" method="post" action="{% url 'confirm_booking' %}">
                 {% csrf_token %}
+                <input type="hidden" name="movie_title" value="{{ screening.screen_movie.title }}">
+                <input type="hidden" name="price" value="{{ screening.amount }}">
+                <input type="hidden" name="screening_date" value="{{ screening.screening_date }}">
+                <input type="hidden" name="show_time" value="{{ screening.screening_starts }}">
+                <input type="hidden" name="auditorium" value="{{ screening.auditorium_tbl.name }}">
                 <input type="text" name="selected_seats" id="selected-seats-input" required>
                 <input type="text" name="total_amount" id="total-amount-input" required>
                 <button type="submit" class="button">Confirm Booking</button>
