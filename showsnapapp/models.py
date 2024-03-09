@@ -66,7 +66,17 @@ class Customer(models.Model):
         return f"{self.user.username} ({self.user.first_name} {self.user.last_name})"
 
 
+class Reservations(models.Model):
+    bkd_customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE
+    )  
+    show = models.ForeignKey(
+        Screening, on_delete=models.CASCADE
+    )
+    seat_name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f"Reservation for {self.bkd_customer.user.username} for {self.show.screening_starts} at {self.show.auditorium_tbl.name}, Seat: {self.seat_name}"
 
 
 

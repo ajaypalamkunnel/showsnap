@@ -1,6 +1,6 @@
 from urllib.parse import urlencode
 from django.shortcuts import redirect, render
-from .models import Auditorium, Booking, Customer, Movie, Screening, Seat
+from .models import Auditorium, Booking, Customer, Movie, Reservations, Screening, Seat
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -158,7 +158,6 @@ def generate_booking_id():
     return str(uuid.uuid4())[:5].upper()
 
 
-
 def my_view(request):
     # Check if the user is authenticated
     if request.user.is_authenticated:
@@ -232,40 +231,51 @@ def payment_success(request):
     show_time = request.GET.get('show_time')
     auditorium = request.GET.get('auditorium')
     selected_seats = request.GET.get('selected_seats').split(',')
-    
-    #user_data = User.objects.get(pk=request.user.id)
-    #username = user_data.username
+
+    # user_data = User.objects.get(pk=request.user.id)
+    # username = user_data.username
     user = request.user
     customer = Customer.objects.get(user=user)
     screening_instance = Screening.objects.get(screening_starts=show_time)
     auditorium_instance = Auditorium.objects.get(name=auditorium)
 
     print(booking_id, total_amount, screening_date, movie_title,
-          price, show_time, auditorium, selected_seats,customer)
-    
-    
-    #Booking entry
-    
+          price, show_time, auditorium, selected_seats, customer)
+
+    # Booking entry
+
     booking = Booking.objects.create(
-                #booking_id=booking_id,
-                total_amount=total_amount,
-                showtime=screening_instance,
-                bkd_customer=customer,
-                booking_status = True# Assuming the user is authenticated and related to the booking
-                # Add other fields as needed
-            )
+        # booking_id=booking_id,
+        total_amount=total_amount,
+        showtime=screening_instance,
+        bkd_customer=customer,
+        booking_status=True  # Assuming the user is authenticated and related to the booking
+        # Add other fields as needed
+    )
     
     
+    
+    selected_seats_str = ', '.join(
+        [f"'{seat.strip()}'" for seat in selected_seats if seat.strip()])
+    reservation = Reservations.objects.create(
+        bkd_customer=customer,
+        show=screening_instance,
+        seat_name=selected_seats_str
+
+    )
+
     for seat in selected_seats:
         if len(seat) >= 2:
             row = seat[0]
-            seat_number_str = seat[1:]  # Extract the numeric part of the seat number string
-        
+            # Extract the numeric part of the seat number string
+            seat_number_str = seat[1:]
+
         # Check if the seat number string contains only numeric characters
             if seat_number_str.isdigit():
-                seat_number = int(seat_number_str)  # Convert the numeric part to an integer
+                # Convert the numeric part to an integer
+                seat_number = int(seat_number_str)
                 print("row:", row, "seat number:", seat_number)
-            
+
             # Create a new Seat instance and associate it with the booking
                 seat_instance = Seat.objects.create(
                     screen=auditorium_instance,  # Assuming you have auditorium_instance defined elsewhere
@@ -274,17 +284,8 @@ def payment_success(request):
                     is_booked=True,  # Assuming the seat is booked for this booking
                 )
             else:
-            # Handle the case where the seat number contains non-numeric characters
+                # Handle the case where the seat number contains non-numeric characters
                 print(f"Invalid seat number: {seat}")
-
-
-
-
-
-
-
-
-
 
     # Process payment success logic with booking data
     # For example, save the booking details to the database or display a success message
@@ -300,9 +301,21 @@ def payment_success(request):
     })
 
 
+def view_ticket(request):
+    return render(request, 'view_ticket.html')
 
 
-    #for seat in selected_seats:
+
+
+
+
+
+
+
+
+
+
+    # for seat in selected_seats:
     # Extract row and seat number from the seat value
     #    row, seat_number = seat.split()
     #    print(row,"  ",seat_number)# Assuming the seat value is in the format 'A3', 'B5', etc.
@@ -315,14 +328,6 @@ def payment_success(request):
     # )
     # Add the seat instance to the booked_seats of the booking
    # booking.booked_seats.add(seat_instance)
-
-
-
-
-
-
-
-
 
 
 # Create your views here.
