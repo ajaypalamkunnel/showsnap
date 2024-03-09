@@ -158,6 +158,19 @@ def generate_booking_id():
     return str(uuid.uuid4())[:5].upper()
 
 
+
+def my_view(request):
+    # Check if the user is authenticated
+    if request.user.is_authenticated:
+        # Retrieve the username of the logged-in user
+        username = request.user.username
+        # Now you can use the username as needed
+        return HttpResponse(f'Logged in as {username}')
+    else:
+        # Handle the case where the user is not authenticated
+        return HttpResponse('Please log in first')
+
+
 @login_required(login_url='login')
 def confirm_booking(request):
     if request.method == 'POST':
@@ -219,9 +232,59 @@ def payment_success(request):
     show_time = request.GET.get('show_time')
     auditorium = request.GET.get('auditorium')
     selected_seats = request.GET.get('selected_seats').split(',')
+    
+    #user_data = User.objects.get(pk=request.user.id)
+    #username = user_data.username
+    user = request.user
+    customer = Customer.objects.get(user=user)
+    screening_instance = Screening.objects.get(screening_starts=show_time)
+    auditorium_instance = Auditorium.objects.get(name=auditorium)
 
     print(booking_id, total_amount, screening_date, movie_title,
-          price, show_time, auditorium, selected_seats)
+          price, show_time, auditorium, selected_seats,customer)
+    
+    
+    #Booking entry
+    
+    booking = Booking.objects.create(
+                #booking_id=booking_id,
+                total_amount=total_amount,
+                showtime=screening_instance,
+                bkd_customer=customer,
+                booking_status = True# Assuming the user is authenticated and related to the booking
+                # Add other fields as needed
+            )
+    
+    
+    for seat in selected_seats:
+        if len(seat) >= 2:
+            row = seat[0]
+            seat_number_str = seat[1:]  # Extract the numeric part of the seat number string
+        
+        # Check if the seat number string contains only numeric characters
+            if seat_number_str.isdigit():
+                seat_number = int(seat_number_str)  # Convert the numeric part to an integer
+                print("row:", row, "seat number:", seat_number)
+            
+            # Create a new Seat instance and associate it with the booking
+                seat_instance = Seat.objects.create(
+                    screen=auditorium_instance,  # Assuming you have auditorium_instance defined elsewhere
+                    row=row,
+                    seat_number=seat_number,
+                    is_booked=True,  # Assuming the seat is booked for this booking
+                )
+            else:
+            # Handle the case where the seat number contains non-numeric characters
+                print(f"Invalid seat number: {seat}")
+
+
+
+
+
+
+
+
+
 
     # Process payment success logic with booking data
     # For example, save the booking details to the database or display a success message
@@ -235,6 +298,31 @@ def payment_success(request):
         'auditorium': auditorium,
         'selected_seats': selected_seats,
     })
+
+
+
+
+    #for seat in selected_seats:
+    # Extract row and seat number from the seat value
+    #    row, seat_number = seat.split()
+    #    print(row,"  ",seat_number)# Assuming the seat value is in the format 'A3', 'B5', etc.
+    # Create a new Seat instance and associate it with the booking
+    #     seat_instance = Seat.objects.create(
+    #     screen=auditorium,  # Assuming you have auditorium_instance defined elsewhere
+    #     row=row,
+    #     seat_number=int(seat_number),
+    #     is_booked=True,  # Assuming the seat is booked for this booking
+    # )
+    # Add the seat instance to the booked_seats of the booking
+   # booking.booked_seats.add(seat_instance)
+
+
+
+
+
+
+
+
 
 
 # Create your views here.

@@ -54,6 +54,8 @@ class Seat(models.Model):
     row = models.CharField(max_length=1)  # Represents the row identifier (e.g., A, B, C)
     seat_number = models.IntegerField()   # Represents the seat number within the row
     is_booked = models.BooleanField(default=False)
+    def __str__(self):
+        return f"{self.row} ({self.seat_number})"
 
 
 class Customer(models.Model):
@@ -62,6 +64,9 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"{self.user.username} ({self.user.first_name} {self.user.last_name})"
+
+
+
 
 
 
@@ -74,7 +79,8 @@ class Booking(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"Booking ID: {self.booking_id}, Customer: {self.bkd_customer}, Show: {self.screen}"
+        return f"Booking ID: {self.id}, Customer: {self.bkd_customer}"
+
 
 
 class Payment(models.Model):
@@ -84,6 +90,7 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment for Booking {self.booking_id}"
+
 
 # class Customer(models.Model): 
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
