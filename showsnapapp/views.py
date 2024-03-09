@@ -1,4 +1,8 @@
+from .models import Reservations
+from django.shortcuts import get_object_or_404
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
 import io
+import os
 from urllib.parse import urlencode
 from django.shortcuts import redirect, render
 from .models import Auditorium, Booking, Customer, Movie, Reservations, Screening, Seat
@@ -13,14 +17,18 @@ from django.conf import settings
 from instamojo_wrapper import Instamojo
 
 
-
-
+from reportlab.lib.units import inch
 from reportlab.lib import colors
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.graphics.barcode import qr
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics import renderPDF
+from reportlab.platypus import Image
 from reportlab.lib.styles import getSampleStyleSheet
-
-
 
 
 api = Instamojo(api_key=settings.API_KEY,
@@ -264,9 +272,7 @@ def payment_success(request):
         booking_status=True  # Assuming the user is authenticated and related to the booking
         # Add other fields as needed
     )
-    
-    
-    
+
     selected_seats_str = ', '.join(
         [f"'{seat.strip()}'" for seat in selected_seats if seat.strip()])
     reservation = Reservations.objects.create(
@@ -275,6 +281,7 @@ def payment_success(request):
         seat_name=selected_seats_str
 
     )
+    print("Reservation ID", reservation.id)
 
     for seat in selected_seats:
         if len(seat) >= 2:
@@ -310,47 +317,66 @@ def payment_success(request):
         'show_time': show_time,
         'auditorium': auditorium,
         'selected_seats': selected_seats,
+        'reservation_id': reservation.id
     })
-
-
-
 
 
 # def view_ticket(request):
 #     return render(request, 'view_ticket.html')
+#
 
-def view_ticket(request):
-    
+
+@login_required(login_url='login')
+def view_ticket(request, reservation_id):
+    # Retrieve the reservation details
+    reservation = get_object_or_404(Reservations, id=reservation_id)
+
     # Create a buffer for the PDF content
     buffer = io.BytesIO()
 
     # Create a new PDF document
     pdf = SimpleDocTemplate(buffer, pagesize=letter)
 
-    # Create a stylesheet
-    styles = getSampleStyleSheet()
-
     # Add content to the PDF
     elements = []
 
-    # Example content
-    elements.append(Paragraph("Hello, this is a PDF generated using ReportLab in Django.", styles['Normal']))
+    # Set background color
+    background_color = colors.HexColor('#00002f')
+    rect_svg = '<rect width="100%" height="100%" fill="{}" />'.format(
+        background_color)
+    elements.append(Paragraph(rect_svg, getSampleStyleSheet()['Normal']))
 
-    # Create a table
-    data = [['Name', 'Age', 'Country'],
-            ['John Doe', 30, 'USA'],
-            ['Jane Smith', 25, 'UK']]
+    # Title
+    title_style = ParagraphStyle(
+        name='Title', fontName='Helvetica-Bold', fontSize=16, textColor=colors.blueviolet)
+    title = Paragraph("<b>ShowSnap - Movie Ticket</b>", title_style)
+    elements.append(title)
 
-    table = Table(data)
-    table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-                               ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                               ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                               ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                               ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                               ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                               ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
-    
+    # Ticket details
+    ticket_details = [
+        ["Booking ID", "Movie", "Screen", "Show Time", "Seats"],
+        [reservation.id, reservation.show.screen_movie.title, reservation.show.auditorium_tbl.name, f"{
+            reservation.show.screening_date} {reservation.show.screening_starts}", reservation.seat_name],
+    ]
+
+    # Create a table for ticket details
+    table = Table(ticket_details, colWidths=[100, 150, 100, 100, 150])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
+
     elements.append(table)
+
+    # Add QR code
+    qr_code = qr.QrCodeWidget('dummy qr code')
+    d = Drawing(100, 100, transform=[100, 0, 0, 100, 0, 0])
+    d.add(qr_code)
+    elements.append(d)
 
     # Build the PDF document
     pdf.build(elements)
@@ -358,20 +384,11 @@ def view_ticket(request):
     # Get the value of the buffer and return as a PDF response
     pdf_data = buffer.getvalue()
     buffer.close()
-    
+
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="example.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="movie_ticket.pdf"'
     response.write(pdf_data)
     return response
-
-
-
-
-
-
-
-
-
 
     # for seat in selected_seats:
     # Extract row and seat number from the seat value
@@ -386,8 +403,6 @@ def view_ticket(request):
     # )
     # Add the seat instance to the booked_seats of the booking
    # booking.booked_seats.add(seat_instance)
-
-
 # Create your views here.
 # def home(request):
 #     # Fetch movies, for example, let's assume we want to display released movies

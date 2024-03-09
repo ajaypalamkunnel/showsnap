@@ -12,7 +12,8 @@
         <h1>Payment Success</h1>
         <div class="tick-mark">&#10004;</div>
         <p>You can download the ticket.</p>
-        <a href="{% url 'view_ticket' %}" class="payment-button">View Ticket</a>
+        <h1>Reservation ID: {{reservation_id}}</h1>
+        <a href="{% url 'view_ticket' reservation_id %}" class="payment-button">View Ticket</a>
         <a href="{% url 'home' %}" class="home-button">Home</a>
     </div>
 </body>
