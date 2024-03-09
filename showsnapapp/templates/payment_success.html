@@ -1,4 +1,19 @@
 {% load static %}
-
-<h1>payment success</h2>
-<button>view ticket</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <link rel="stylesheet" href="{% static 'css/payment_success.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Success</h1>
+        <div class="tick-mark">&#10004;</div>
+        <p>You can download the ticket.</p>
+        <a href="{% url 'view_ticket' %}" class="payment-button">View Ticket</a>
+        <a href="{% url 'home' %}" class="home-button">Home</a>
+    </div>
+</body>
+</html>

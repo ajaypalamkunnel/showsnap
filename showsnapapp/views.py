@@ -1,3 +1,4 @@
+import io
 from urllib.parse import urlencode
 from django.shortcuts import redirect, render
 from .models import Auditorium, Booking, Customer, Movie, Reservations, Screening, Seat
@@ -10,6 +11,17 @@ from django.contrib.auth.decorators import login_required
 import uuid
 from django.conf import settings
 from instamojo_wrapper import Instamojo
+
+
+
+
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet
+
+
+
 
 api = Instamojo(api_key=settings.API_KEY,
                 auth_token=settings.AUTH_TOKEN, endpoint='https://test.instamojo.com/api/1.1/'
@@ -301,10 +313,56 @@ def payment_success(request):
     })
 
 
+
+
+
+# def view_ticket(request):
+#     return render(request, 'view_ticket.html')
+
 def view_ticket(request):
-    return render(request, 'view_ticket.html')
+    
+    # Create a buffer for the PDF content
+    buffer = io.BytesIO()
 
+    # Create a new PDF document
+    pdf = SimpleDocTemplate(buffer, pagesize=letter)
 
+    # Create a stylesheet
+    styles = getSampleStyleSheet()
+
+    # Add content to the PDF
+    elements = []
+
+    # Example content
+    elements.append(Paragraph("Hello, this is a PDF generated using ReportLab in Django.", styles['Normal']))
+
+    # Create a table
+    data = [['Name', 'Age', 'Country'],
+            ['John Doe', 30, 'USA'],
+            ['Jane Smith', 25, 'UK']]
+
+    table = Table(data)
+    table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                               ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                               ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                               ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                               ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                               ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                               ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
+    
+    elements.append(table)
+
+    # Build the PDF document
+    pdf.build(elements)
+
+    # Get the value of the buffer and return as a PDF response
+    pdf_data = buffer.getvalue()
+    buffer.close()
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="example.pdf"'
+    response.write(pdf_data)
+    return response
 
 
 
