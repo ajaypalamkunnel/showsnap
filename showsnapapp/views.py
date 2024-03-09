@@ -141,6 +141,8 @@ def booking(request, screening_id):
         # Generate seat layout dynamically based on auditorium capacity and booking status
         seat_layout = generate_seat_layout(screening)
         # Pass the screening, seat_layout, and other necessary data to the template
+        
+        #print("Reservationsssssss:",reservation.id)
         return render(request, 'booking_page.html', {'screening': screening, 'seat_layout': seat_layout})
     except Screening.DoesNotExist:
         return HttpResponse("Screening not found")
