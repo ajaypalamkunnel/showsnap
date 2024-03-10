@@ -35,20 +35,14 @@
             {% for row in seat_layout %}
                 <div class="row">
                     {% for seat in row %}
-                        {% with seat_booked=False %}
-                            {% for reserved_seat in reserved_seats %}
-                                {% if seat.name == reserved_seat %}
-                                    <div class="seat booked" disabled>{{ seat.name }}</div>
-                                    {% if not seat_booked %}
-                                        {% with seat_booked=True %}
-                                        {% endwith %}
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                            {% if not seat_booked %}
-                                <div class="seat available" onclick="selectSeat('{{ seat.name }}', {{ screening.amount }})">{{ seat.name }}</div>
+                        {% for reserved_seat in reserved_seats %}
+                            {% if seat.name == reserved_seat %}
+                                <div class="seat booked" disabled>{{ seat.name }}</div>
                             {% endif %}
-                        {% endwith %}
+                        {% endfor %}
+                        {% if seat.name not in reserved_seats %}
+                            <div class="seat available" onclick="selectSeat('{{ seat.name }}', {{ screening.amount }})">{{ seat.name }}</div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% endfor %}

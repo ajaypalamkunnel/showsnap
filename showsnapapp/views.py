@@ -154,6 +154,7 @@ def booking(request, screening_id):
             seats_list = ast.literal_eval(seats_str)
             reserved_seats_list.extend(seats_list)
         
+        print("seat lay",seat_layout)
         
         
         #print("Reservationsssssss:",reservation.id)
