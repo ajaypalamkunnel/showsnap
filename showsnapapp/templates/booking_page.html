@@ -8,10 +8,13 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/style2.css' %}">
     <link rel="stylesheet" href="{% static 'css/booking_page_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
 </head>
 <body>
-    {% include 'navbar.html' %}
+    
     {% block content %}
+    
     <div class="container">
         <h2>Seat Selection</h2>
         <div class="movie-details-container">
@@ -32,15 +35,25 @@
             {% for row in seat_layout %}
                 <div class="row">
                     {% for seat in row %}
-                        {% if seat.is_booked %}
-                            <div class="seat booked" disabled>{{ seat.name }}</div>
-                        {% else %}
-                        <div class="seat available" onclick="selectSeat('{{ seat.name }}', {{ screening.amount }})">{{ seat.name }}</div>
-                        {% endif %}
+                        {% with seat_booked=False %}
+                            {% for reserved_seat in reserved_seats %}
+                                {% if seat.name == reserved_seat %}
+                                    <div class="seat booked" disabled>{{ seat.name }}</div>
+                                    {% if not seat_booked %}
+                                        {% with seat_booked=True %}
+                                        {% endwith %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if not seat_booked %}
+                                <div class="seat available" onclick="selectSeat('{{ seat.name }}', {{ screening.amount }})">{{ seat.name }}</div>
+                            {% endif %}
+                        {% endwith %}
                     {% endfor %}
                 </div>
             {% endfor %}
         </div>
+        
 
         <div class="example">
             <div class="booked-seats">

@@ -1,3 +1,4 @@
+import ast
 from .models import Reservations
 from django.shortcuts import get_object_or_404
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
@@ -147,8 +148,16 @@ def booking(request, screening_id):
         reserved_seats = [reservation.seat_name for reservation in reservations]
         
         print(reserved_seats)
+        reserved_seats_str = reserved_seats
+        reserved_seats_list = []
+        for seats_str in reserved_seats_str:
+            seats_list = ast.literal_eval(seats_str)
+            reserved_seats_list.extend(seats_list)
+        
+        
+        
         #print("Reservationsssssss:",reservation.id)
-        return render(request, 'booking_page.html', {'screening': screening, 'seat_layout': seat_layout, 'reserved_seats': reserved_seats,})
+        return render(request, 'booking_page.html', {'screening': screening, 'seat_layout': seat_layout, 'reserved_seats': reserved_seats_list,})
     except Screening.DoesNotExist:
         return HttpResponse("Screening not found")
 

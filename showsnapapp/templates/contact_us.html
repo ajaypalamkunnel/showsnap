@@ -1,2 +1,43 @@
 {% load static %}
-{% include 'navbar.html' %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - ShowSnap Cinemas</title>
+    <link rel="stylesheet" href="{% static 'css/contacts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style2.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="logo">
+          <img
+            src="{% static 'images/logo.png' %}"
+            alt="Movie Ticket Booking Logo"
+          />
+        </div>
+        <ul class="nav-links">
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li><a href="{% url 'my_account' %}">My Account</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %}
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="contact-info">
+            <h2>ShowSnap Cinemas</h2>
+            <p><strong>Address:</strong> Kottayam road Pala </p>
+            <p><strong>Contact No:</strong> 9496831320</p>
+            <p><strong>Email:</strong> showsnapcinemas@gmail.com</p>
+            <!-- Add social media links and icons here -->
+        </div>
+    </div>
+</body>
+</html>
