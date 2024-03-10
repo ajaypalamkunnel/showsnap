@@ -152,7 +152,7 @@ def booking(request, screening_id):
     except Screening.DoesNotExist:
         return HttpResponse("Screening not found")
 
-@login_required(login_url='login')
+
 def generate_seat_layout(screening):
     # Initialize an empty seat layout
     seat_layout = []
@@ -180,7 +180,7 @@ def generate_seat_layout(screening):
     except Auditorium.DoesNotExist:
         return HttpResponse("Auditorium not found")
 
-@login_required(login_url='login')
+
 def generate_booking_id():
     return str(uuid.uuid4())[:5].upper()
 
