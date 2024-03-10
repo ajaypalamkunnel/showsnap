@@ -8,7 +8,7 @@
     </div>
     <ul class="nav-links">
       <li><a href="{% url 'home' %}">Home</a></li>
-      <li><a href="#">Contact Us</a></li>
+      <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
       {% if user.is_authenticated %}
         <li><a href="{% url 'logout' %}">Logout</a></li>
         <li><a href="{% url 'my_account' %}">My Account</a></li>

@@ -123,12 +123,14 @@ def logout(request):
     auth_logout(request)
     return redirect('login')
 
-
+@login_required(login_url='login')
 def my_account(request):
     # Fetch data from the User table
-    user_data = User.objects.get(pk=request.user.id)
-
-    return render(request, 'my_account.html', {'user_data': user_data})
+    user_data = request.user
+    # Fetch booking history from the Reservations table
+    booking_history = Reservations.objects.filter(bkd_customer=user_data.customer)
+    
+    return render(request, 'my_account.html', {'user': user_data, 'booking_history': booking_history})
 
 
 @login_required(login_url='login')
@@ -150,7 +152,7 @@ def booking(request, screening_id):
     except Screening.DoesNotExist:
         return HttpResponse("Screening not found")
 
-
+@login_required(login_url='login')
 def generate_seat_layout(screening):
     # Initialize an empty seat layout
     seat_layout = []
@@ -178,11 +180,11 @@ def generate_seat_layout(screening):
     except Auditorium.DoesNotExist:
         return HttpResponse("Auditorium not found")
 
-
+@login_required(login_url='login')
 def generate_booking_id():
     return str(uuid.uuid4())[:5].upper()
 
-
+@login_required(login_url='login')
 def my_view(request):
     # Check if the user is authenticated
     if request.user.is_authenticated:
@@ -331,6 +333,11 @@ def payment_success(request):
 #
 
 
+
+def contact_us(request):
+    return render(request,'contact_us.html')
+
+
 @login_required(login_url='login')
 def view_ticket(request, reservation_id):
     # Retrieve the reservation details
@@ -395,68 +402,3 @@ def view_ticket(request, reservation_id):
     response.write(pdf_data)
     return response
 
-    # for seat in selected_seats:
-    # Extract row and seat number from the seat value
-    #    row, seat_number = seat.split()
-    #    print(row,"  ",seat_number)# Assuming the seat value is in the format 'A3', 'B5', etc.
-    # Create a new Seat instance and associate it with the booking
-    #     seat_instance = Seat.objects.create(
-    #     screen=auditorium,  # Assuming you have auditorium_instance defined elsewhere
-    #     row=row,
-    #     seat_number=int(seat_number),
-    #     is_booked=True,  # Assuming the seat is booked for this booking
-    # )
-    # Add the seat instance to the booked_seats of the booking
-   # booking.booked_seats.add(seat_instance)
-# Create your views here.
-# def home(request):
-#     # Fetch movies, for example, let's assume we want to display released movies
-#     released_movies = Movie.objects.filter(status='released')
-#     return render(request, 'home.html', {'released_movies': released_movies})
-# def film_listing(request):
-#     # Retrieve all screenings with related movie data using select_related
-#     screenings = Screening.objects.select_related('screen_movie').all()
-#     # Render the template with the screenings data
-#     print("film",screenings.screen_movie.title)
-#     return render(request, 'film_listing.html', {'screenings': screenings})
-'''
-
-def signup(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-        phone = request.POST['phone']
-        
-        # Check if any field is empty
-        if not all([username, password, first_name, last_name, email, phone]):
-            messages.error(request, 'Please fill in all the fields.')
-        else:
-            try:
-                # Attempt to create a new User object
-                print("checking")
-                print(username)
-                print(password)
-                my_user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-                print(username)
-                # Attempt to create a new Customer object associated with the user
-                customer = Customer.objects.create(user=my_user, phone=phone)
-                print("helloo")
-                my_user.save()
-               
-                messages.success(request, 'Account created successfully!')
-                # Redirect to the login page
-                return redirect('login')
-                
-            except Exception as e:
-                # Handle specific errors here
-                if 'unique constraint' in str(e).lower():
-                    messages.error(request, 'Username or email already exists.')
-                else:
-                    messages.error(request, 'An error occurred during signup.')
-    
-    return render(request, 'signup.html')
-
-'''

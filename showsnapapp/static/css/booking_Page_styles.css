@@ -20,6 +20,18 @@ body {
 }
 
 /* Add this CSS to your existing stylesheet */
+.example {
+  display: flex;
+  justify-content: space-between;
+}
+
+.booked-seats,
+.available-seats {
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+}
+
 
 .seat-layout {
   display: flex;

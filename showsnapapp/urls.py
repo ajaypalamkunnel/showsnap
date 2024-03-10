@@ -13,7 +13,8 @@ urlpatterns = [
     path('my_account/',views.my_account,name='my_account'),
     path('confirm_booking/', views.confirm_booking, name='confirm_booking'),
     path('payment_success/',views.payment_success,name='payment_success'),
-    path('view_ticket/<int:reservation_id>/', views.view_ticket, name='view_ticket')
+    path('view_ticket/<int:reservation_id>/', views.view_ticket, name='view_ticket'),
+    path('contact_us/', views.contact_us, name='contact_us')
     #path('home/',views.film_listing,name='home')
     
 ]

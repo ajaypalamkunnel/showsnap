@@ -23,15 +23,20 @@
         </div>
         <div class="booking-history">
             <h2>Booking History</h2>
-             <div class="history">
-                {% for booking in booking_history %}
-                    <div class="booking-row">
-                        <p>{{ booking.movie }}</p>
-                        <p>{{ booking.date }}</p>
-                        <p>{{ booking.seat }}</p>
-                    </div>
-                {% endfor %}
-            </div> 
+            <div class="history">
+                {% if booking_history %}
+                    {% for booking in booking_history %}
+                        <div class="booking-row">
+                            <p>{{ booking.show.screen_movie.title }}</p>
+                            <p>{{ booking.show.screening_date }}</p>
+                            <p>{{ booking.show.screening_starts }}</p>
+                            <p>{{ booking.seat_name }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No booking history available.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </body>
