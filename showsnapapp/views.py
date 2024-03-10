@@ -40,12 +40,13 @@ api = Instamojo(api_key=settings.API_KEY,
 def home(request):
     # Fetch released movies
     released_movies = Movie.objects.filter(status='released')
+    upcoming_movies = Movie.objects.filter(status='upcoming')
 
     # Retrieve all screenings with related movie data
     screenings = Screening.objects.select_related('screen_movie').all()
 
     # Render the template with the released movies and screenings data
-    return render(request, 'home.html', {'released_movies': released_movies, 'screenings': screenings})
+    return render(request, 'home.html', {'released_movies': released_movies, 'screenings': screenings,'upcoming_movies':upcoming_movies})
 
 
 def login(request):

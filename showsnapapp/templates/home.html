@@ -76,50 +76,22 @@
     <section class="upcoming-movies">
       <h2>Coming Soon</h2>
       <div class="movie-scroll">
-        <!-- Add more movie containers as needed -->
-        <div class="movie-container">
-          <img
-            src="{% static 'images/avatar.png' %}"
-            alt="Upcoming Movie 1 Poster"
-            class="movie-poster"
-          />
-          <div class="movie-details">
-            <h3 class="movie-title">Upcoming Movie 1</h3>
-            <p class="movie-info">Language: English</p>
-            <p class="movie-info">Release Date: February 2024</p>
+          {% for movie in upcoming_movies %}
+          <div class="movie-container">
+              <div class="movie-container-poster">
+                  <img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster" class="movie-poster" />
+              </div>
+              <div class="movie-details">
+                  <h3 class="movie-title">{{ movie.title }}</h3>
+                  <p class="movie-info">Language: {{ movie.language }}</p>
+                  <p class="movie-info">Release Date: {{ movie.release_date|date:"F Y" }}</p>
+              </div>
+              <button class="book-now-button">Book Now</button>
           </div>
-          <button class="book-now-button">Book Now</button>
-        </div>
-        <div class="movie-container">
-          <img
-            src="{% static 'images/avatar.png' %}"
-            alt="Upcoming Movie 1 Poster"
-            class="movie-poster"
-          />
-          <div class="movie-details">
-            <h3 class="movie-title">Upcoming Movie 1</h3>
-            <p class="movie-info">Language: English</p>
-            <p class="movie-info">Release Date: February 2024</p>
-          </div>
-          <button class="book-now-button">Book Now</button>
-        </div>
-        <div class="movie-container">
-          <img
-            src="{% static 'images/avatar.png' %}"
-            alt="Upcoming Movie 1 Poster"
-            class="movie-poster"
-          />
-          <div class="movie-details">
-            <h3 class="movie-title">Upcoming Movie 1</h3>
-            <p class="movie-info">Language: English</p>
-            <p class="movie-info">Release Date: February 2024</p>
-          </div>
-          <button class="book-now-button">Book Now</button>
-        </div>
-        <!-- Add more movie containers as needed -->
+          {% endfor %}
       </div>
-    </section>
-
+  </section>
+  
     <footer class="footer">
       <div class="footer-links">
         <a href="#">Terms & Conditions</a>
