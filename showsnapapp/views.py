@@ -347,8 +347,10 @@ def payment_success(request):
 
 def contact_us(request):
     return render(request,'contact_us.html')
-
-
+from reportlab.lib.pagesizes import letter, landscape   
+from reportlab.graphics import barcode
+import qrcode
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 @login_required(login_url='login')
 def view_ticket(request, reservation_id):
     # Retrieve the reservation details
@@ -357,46 +359,41 @@ def view_ticket(request, reservation_id):
     # Create a buffer for the PDF content
     buffer = io.BytesIO()
 
-    # Create a new PDF document
-    pdf = SimpleDocTemplate(buffer, pagesize=letter)
+    # Create a new PDF document with landscape orientation and reduced size
+    page_width, page_height = landscape(letter)
+    reduced_page_width = page_width / 2
+    reduced_page_height = page_height / 2
+    pdf = SimpleDocTemplate(buffer, pagesize=(reduced_page_width, reduced_page_height))
 
     # Add content to the PDF
     elements = []
 
     # Set background color
     background_color = colors.HexColor('#00002f')
-    rect_svg = '<rect width="100%" height="100%" fill="{}" />'.format(
-        background_color)
+    rect_svg = '<rect width="100%" height="100%" fill="{}" />'.format(background_color)
     elements.append(Paragraph(rect_svg, getSampleStyleSheet()['Normal']))
 
     # Title
-    title_style = ParagraphStyle(
-        name='Title', fontName='Helvetica-Bold', fontSize=16, textColor=colors.blueviolet)
+    title_style = ParagraphStyle(name='Title', fontName='Helvetica-Bold', fontSize=16, textColor=colors.blueviolet)
     title = Paragraph("<b>ShowSnap - Movie Ticket</b>", title_style)
     elements.append(title)
+    elements.append(Spacer(1, 20))  # Add some space between title and QR code
 
     # Ticket details
-    ticket_details = [
-        ["Booking ID", "Movie", "Screen", "Show Time", "Seats"],
-        [reservation.id, reservation.show.screen_movie.title, reservation.show.auditorium_tbl.name, f"{
-            reservation.show.screening_date} {reservation.show.screening_starts}", reservation.seat_name],
+    details = [
+        f"Booking ID: {reservation.id}",
+        f"Movie: {reservation.show.screen_movie.title}",
+        f"Screen: {reservation.show.auditorium_tbl.name}",
+        f"Show Time: {reservation.show.screening_date} {reservation.show.screening_starts}",
+        f"Seats: {reservation.seat_name}"
     ]
-
-    # Create a table for ticket details
-    table = Table(ticket_details, colWidths=[100, 150, 100, 100, 150])
-    table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
-
-    elements.append(table)
+    for detail in details:
+        elements.append(Paragraph(detail, getSampleStyleSheet()['Normal']))
+    
+    elements.append(Spacer(1, 20))  # Add some space between details and QR code
 
     # Add QR code
-    qr_code = qr.QrCodeWidget('dummy qr code')
+    qr_code = barcode.createBarcodeDrawing('QR', value=f'Booking ID: {reservation.id}', barHeight=50)
     d = Drawing(100, 100, transform=[100, 0, 0, 100, 0, 0])
     d.add(qr_code)
     elements.append(d)
@@ -412,4 +409,3 @@ def view_ticket(request, reservation_id):
     response['Content-Disposition'] = 'attachment; filename="movie_ticket.pdf"'
     response.write(pdf_data)
     return response
-
