@@ -1,0 +1,65 @@
+<!-- schedule_show.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Show</title>
+    <link rel="stylesheet" href="{% static 'css/schedule_show.css' %}">
+</head>
+<body style="background-color: #22053b;">
+    <div class="container">
+        <h2>Schedule Show</h2>
+        {% if messages %}
+            <div class="alert">
+                <script>
+                    {% for message in messages %}
+                        alert("{{ message }}");
+                    {% endfor %}
+                </script>
+            </div>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="screen_movie">Movie:</label>
+                <select id="screen_movie" name="screen_movie" required>
+                    {% for movie in movies %}
+                        <option value="{{ movie.id }}">{{ movie.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" required>
+            </div>
+            <div class="form-group">
+                <label for="auditorium_tbl">Auditorium:</label>
+                <select id="auditorium_tbl" name="auditorium_tbl" required>
+                    {% for auditorium in auditoriums %}
+                        <option value="{{ auditorium.id }}">{{ auditorium.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="screening_starts">Screening Time:</label>
+                <select id="screening_starts" name="screening_starts" required>
+                    {% for time_choice in TIME_CHOICES %}
+                        <option value="{{ time_choice.0 }}">{{ time_choice.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="screening_date">Screening Date:</label>
+                <input type="date" id="screening_date" name="screening_date" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Schedule Show</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

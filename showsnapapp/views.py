@@ -409,3 +409,99 @@ def view_ticket(request, reservation_id):
     response['Content-Disposition'] = 'attachment; filename="movie_ticket.pdf"'
     response.write(pdf_data)
     return response
+
+
+
+
+
+
+#Admin
+
+
+
+
+
+def login_admin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            if user.is_superuser:  # Check if the user is a superuser
+                auth_login(request, user)  # Using the auth_login function
+                return redirect('admin_dashboard')
+            else:
+                messages.error(request, 'You are not authorized to access this page.')
+        else:
+            messages.error(request, 'Invalid username or password.')
+
+    return render(request, 'login_admin.html')
+
+
+@login_required(login_url='login_admin')
+def admin_dashboard(request):
+    return render(request,'admin_dashboard.html')
+
+
+from django.urls import reverse
+def add_movie(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        release_date = request.POST['release_date']
+        duration = request.POST['duration']
+        genre = request.POST['genre']
+        language = request.POST['language']
+        poster = request.FILES['poster']
+        film_director = request.POST['film_director']
+        status = request.POST['status']
+        
+        movie = Movie(title=title, release_date=release_date, duration=duration, genre=genre, language=language, poster=poster, film_director=film_director, status=status)
+        movie.save()
+        messages.success(request, 'Movie added successfully!')
+        return redirect(reverse('add_movie') + '?success=true')  # Redirect with success parameter
+
+    return render(request, 'add_movie.html')
+
+
+@login_required(login_url='login_admin')
+def add_auditorium(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        capacity = request.POST['capacity']
+        
+        try:
+            auditorium = Auditorium(name=name, capacity=capacity)
+            auditorium.save()
+            messages.success(request, 'Auditorium added successfully!')
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
+            
+        return redirect('add_auditorium')
+
+    return render(request, 'add_auditorium.html')
+
+
+def schedule_show(request):
+    if request.method == 'POST':
+        screen_movie_id = request.POST['screen_movie']
+        amount = request.POST['amount']
+        auditorium_id = request.POST['auditorium_tbl']
+        screening_starts = request.POST['screening_starts']
+        screening_date = request.POST['screening_date']
+        
+        # Check if a movie is already scheduled at the given time and date
+        if Screening.objects.filter(screening_starts=screening_starts, screening_date=screening_date).exists():
+            messages.error(request, 'A movie screening is already scheduled at this time and date.')
+        else:
+            screening = Screening(screen_movie_id=screen_movie_id, amount=amount, auditorium_tbl_id=auditorium_id, screening_starts=screening_starts, screening_date=screening_date)
+            screening.save()
+            messages.success(request, 'Show scheduled successfully!')
+        
+        return redirect('schedule_show')
+
+    return render(request, 'schedule_show.html', {'movies': Movie.objects.all(), 'auditoriums': Auditorium.objects.all(), 'TIME_CHOICES': Screening.TIME_CHOICES})
+
+
+def view_tickets(request):
+    reservations = Reservations.objects.all()
+    return render(request, 'view_tickets.html', {'reservations': reservations})

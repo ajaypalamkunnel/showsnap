@@ -28,8 +28,8 @@ body {
   padding: 20px;
   background: rgb(0,0,56);
   background: -moz-linear-gradient(100deg, rgba(0,0,56,1) 0%, rgb(49, 7, 43) 100%);
-  background: -webkit-linear-gradient(100deg, rgba(0,0,56,1) 0%, rgba(70,10,61,1) 100%);
-  background: linear-gradient(100deg, rgba(0,0,56,1) 0%, rgba(70,10,61,1) 100%);
+  background: -webkit-linear-gradient(100deg, rgba(0,0,56,1) 0%, rgb(151, 28, 245) 100%);
+  background: linear-gradient(100deg, rgba(0,0,56,1) 0%, rgb(54, 11, 81) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000038",endColorstr="#460a3d",GradientType=1);
   border-radius: 5px;
 }

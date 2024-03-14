@@ -1,0 +1,68 @@
+<!-- add_movie.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Movie</title>
+    <link rel="stylesheet" href="{% static 'css/add_movie.css' %}">
+</head>
+<body style="background-color: #22053b;">
+    <div class="container">
+        <h2>Add Movie</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="release_date">Release Date:</label>
+                <input type="date" id="release_date" name="release_date" required>
+            </div>
+            <div class="form-group">
+                <label for="duration">Duration (in minutes):</label>
+                <input type="number" id="duration" name="duration" required>
+            </div>
+            <div class="form-group">
+                <label for="genre">Genre:</label>
+                <input type="text" id="genre" name="genre" required>
+            </div>
+            <div class="form-group">
+                <label for="language">Language:</label>
+                <input type="text" id="language" name="language" required>
+            </div>
+            <div class="form-group">
+                <label for="poster">Poster:</label>
+                <input type="file" id="poster" name="poster" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="film_director">Film Director:</label>
+                <input type="text" id="film_director" name="film_director" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status" required>
+                    <option value="released">Released</option>
+                    <option value="upcoming">Upcoming</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">Add Movie</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Check if the URL contains the success parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) {
+            // Display an alert box with a success message
+            alert("Movie added successfully!");
+        }
+    </script>
+</body>
+</html>

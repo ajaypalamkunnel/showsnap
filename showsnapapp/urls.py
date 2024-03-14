@@ -14,7 +14,13 @@ urlpatterns = [
     path('confirm_booking/', views.confirm_booking, name='confirm_booking'),
     path('payment_success/',views.payment_success,name='payment_success'),
     path('view_ticket/<int:reservation_id>/', views.view_ticket, name='view_ticket'),
-    path('contact_us/', views.contact_us, name='contact_us')
+    path('contact_us/', views.contact_us, name='contact_us'),
+    path('login_admin/', views.login_admin, name='login_admin'),
+    path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('add_movie/', views.add_movie, name='add_movie'),
+    path('add_auditorium/', views.add_auditorium, name='add_auditorium'),
+    path('schedule_show/', views.schedule_show, name='schedule_show'),
+    path('view_tickets/', views.view_tickets, name='view_tickets')
     #path('home/',views.film_listing,name='home')
     
 ]

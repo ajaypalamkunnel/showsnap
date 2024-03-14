@@ -1,0 +1,40 @@
+<!-- reservations.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserved Tickets</title>
+    <link rel="stylesheet" href="{% static 'css/reservations.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Reserved Tickets</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Reservation ID</th>
+                    <th>Customer</th>
+                    <th>Show Time</th>
+                    <th>Auditorium</th>
+                    <th>Seat</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation.id }}</td>
+                        <td>{{ reservation.bkd_customer.user.username }}</td>
+                        <td>{{ reservation.show.screening_starts }}</td>
+                        <td>{{ reservation.show.auditorium_tbl.name }}</td>
+                        <td>{{ reservation.seat_name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

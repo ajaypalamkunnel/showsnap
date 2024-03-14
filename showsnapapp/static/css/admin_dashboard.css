@@ -1,0 +1,68 @@
+/* admin_dashboard.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #22053b;
+}
+
+.navbar {
+    background-color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    
+}
+
+.logo {
+    width: 50px; /* Adjust the size of the logo */
+    margin-right: 10px; /* Add some space between the logo and the text */
+    border-radius: 10px;
+}
+
+.dashboard {
+    margin: 20px;
+}
+
+.dashboard-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+}
+
+.dashboard-btn {
+    display: block;
+    padding: 30px;
+    text-align: center;
+    background-color: #fff;
+    color: #22053b;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-btn:hover {
+    background-color: #ccc;
+}
+
+.logout-btn {
+    background-color: #22053b;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #000;
+}

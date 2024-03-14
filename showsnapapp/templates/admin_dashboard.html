@@ -1,0 +1,33 @@
+<!-- admin_dashboard.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+            <span>Welcome, Admin</span>
+        </div>
+        <div class="navbar-right">
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="dashboard-buttons">
+            <a href="{% url 'add_movie' %}" class="dashboard-btn">Add Movie</a>
+            <a href="{% url 'add_auditorium' %}" class="dashboard-btn">Add Auditorium</a>
+            <a href="{% url 'schedule_show' %}" class="dashboard-btn">Schedule Show</a>
+            <a href="{% url 'view_tickets' %}" class="dashboard-btn">View Tickets</a>
+        </div>
+    </div>
+</body>
+</html>
