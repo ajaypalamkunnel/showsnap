@@ -21,7 +21,9 @@ body {
     align-items: center;
     
 }
-
+a {
+    text-decoration: none !important;
+  }
 .logo {
     width: 50px; /* Adjust the size of the logo */
     margin-right: 10px; /* Add some space between the logo and the text */
@@ -33,6 +35,13 @@ body {
 }
 
 .dashboard-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+    margin-top: 50px;
+}
+.dashboard-buttons-r2{
+    margin-top: 10px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 20px;

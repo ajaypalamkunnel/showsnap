@@ -9,8 +9,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Movie</title>
     <link rel="stylesheet" href="{% static 'css/add_movie.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
 </head>
 <body style="background-color: #22053b;">
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a class="atag" href="{% url 'admin_dashboard' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo" />
+              </a>
+            <span>Welcome, Admin</span>
+        </div>
+        <div class="navbar-right">
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
     <div class="container">
         <h2>Add Movie</h2>
         <form method="post" enctype="multipart/form-data">

@@ -1,0 +1,74 @@
+<!-- list_movies.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List Movies</title>
+    <link rel="stylesheet" href="{% static 'css/list_movies.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}" />
+    <script>
+      // Function to display success message
+      function displaySuccessMessage(message) {
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert";
+        alertDiv.innerHTML = "<p>" + message + "</p>";
+        document.body.appendChild(alertDiv);
+        // Automatically remove the message after a certain time (e.g., 5 seconds)
+        setTimeout(function () {
+          alertDiv.remove();
+        }, 5000);
+      }
+    </script>
+  </head>
+  <body style="background-color: #22053b">
+    <nav class="navbar">
+      <div class="navbar-left">
+        <a class="atag" href="{% url 'admin_dashboard' %}">
+          <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo" />
+        </a>
+        <span>Welcome, Admin</span>
+      </div>
+
+      <div class="navbar-right">
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h2>All Movies</h2>
+      <div class="movie-container">
+        {% for movie in movies %}
+        <div class="card">
+          <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" />
+          <div class="movie-details">
+            <h3>{{ movie.title }}</h3>
+            <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+            <p><strong>Duration:</strong> {{ movie.duration }} minutes</p>
+            <p><strong>Genre:</strong> {{ movie.genre }}</p>
+            <p><strong>Language:</strong> {{ movie.language }}</p>
+            <p><strong>Director:</strong> {{ movie.film_director }}</p>
+          </div>
+          <form
+            action="{% url 'delete_movie' movie.id %}"
+            method="post"
+            onsubmit="return confirm('Are you sure you want to delete this movie?');"
+          >
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="delete-btn"
+              onclick="displaySuccessMessage('Movie deleted successfully.')"
+            >
+              Delete
+            </button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

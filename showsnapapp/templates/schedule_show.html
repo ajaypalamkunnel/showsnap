@@ -9,8 +9,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule Show</title>
     <link rel="stylesheet" href="{% static 'css/schedule_show.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
 </head>
 <body style="background-color: #22053b;">
+    <nav class="navbar">
+        <div class="navbar-left">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+            <span>Welcome, Admin</span>
+        </div>
+        <div class="navbar-right">
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
     <div class="container">
         <h2>Schedule Show</h2>
         {% if messages %}

@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Screenings</title>
+    <link rel="stylesheet" href="{% static 'css/show_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+</head>
+<body style="background-color: #22053b;">
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a class="atag" href="{% url 'admin_dashboard' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo" />
+              </a>
+            <span>Welcome, Admin</span>
+        </div>
+        <div class="navbar-right">
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>All Screenings</h2>
+        <div class="screening-container">
+            {% for screening in screenings %}
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ screening.screen_movie.title }}</h3>
+                    <p>{{ screening.screening_starts }}, {{ screening.screening_date }}</p>
+                </div>
+                <div class="card-body">
+                    <p><strong>Auditorium:</strong> {{ screening.auditorium_tbl.name }}</p>
+                    <p><strong>Amount:</strong> {{ screening.amount }}</p>
+                </div>
+                <div class="card-footer">
+                    <form action="{% url 'delete_screening' screening.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this screening?');">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

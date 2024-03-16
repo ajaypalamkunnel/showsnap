@@ -13,7 +13,9 @@
 <body>
     <nav class="navbar">
         <div class="navbar-left">
-            <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+            <a class="atag" href="{% url 'admin_dashboard' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo" />
+              </a>
             <span>Welcome, Admin</span>
         </div>
         <div class="navbar-right">
@@ -27,6 +29,13 @@
             <a href="{% url 'add_auditorium' %}" class="dashboard-btn">Add Auditorium</a>
             <a href="{% url 'schedule_show' %}" class="dashboard-btn">Schedule Show</a>
             <a href="{% url 'view_tickets' %}" class="dashboard-btn">View Tickets</a>
+        </div>
+        <div class="dashboard-buttons">
+            <a href="{% url 'list_movies' %}" class="dashboard-btn">List Movies</a>
+            <a href="{% url 'show_list' %}" class="dashboard-btn">Shows</a>
+            <a href="{% url 'list_auditoriums' %}" class="dashboard-btn">Auditoriums</a>
+            
+        </div>
         </div>
     </div>
 </body>

@@ -505,3 +505,78 @@ def schedule_show(request):
 def view_tickets(request):
     reservations = Reservations.objects.all()
     return render(request, 'view_tickets.html', {'reservations': reservations})
+
+def list_movies(request):
+    # Retrieve all movies from the database
+    movies = Movie.objects.all()
+    # Pass the list of movies to the template context
+    return render(request, 'list_movies.html', {'movies': movies})
+
+
+
+
+def delete_movie(request, movie_id):
+    # Get the movie object to delete
+    movie = get_object_or_404(Movie, pk=movie_id)
+
+    if request.method == 'POST':
+        # Delete the movie
+        movie.delete()
+        # Add success message
+        messages.success(request, 'Movie deleted successfully.')
+        # Redirect to list_movies view
+        return redirect('list_movies')
+
+    # If request method is not POST, redirect to list_movies view
+    return redirect('list_movies')
+
+
+
+def show_list(request):
+    # Retrieve all screenings from the database
+    screenings = Screening.objects.all()
+    # Pass the list of screenings to the template context
+    return render(request, 'show_list.html', {'screenings': screenings})
+
+def delete_screening(request, screening_id):
+    # Get the screening object to delete
+    screening = get_object_or_404(Screening, pk=screening_id)
+
+    if request.method == 'POST':
+        # Delete the screening
+        screening.delete()
+        # Redirect to list_screenings view
+        return redirect('show_list')
+
+    # If request method is not POST, redirect to list_screenings view
+    return redirect('show_list')
+
+
+
+def list_screenings(request):
+    # Retrieve all screenings from the database
+    screenings = Screening.objects.all()
+    # Pass the list of screenings to the template context
+    return render(request, 'show_list.html', {'screenings': screenings})
+
+
+def list_auditoriums(request):
+    # Retrieve all auditoriums from the database
+    auditoriums = Auditorium.objects.all()
+    # Pass the list of auditoriums to the template context
+    return render(request, 'auditorium_list.html', {'auditoriums': auditoriums})
+
+def delete_auditorium(request, auditorium_id):
+    # Get the auditorium object to delete
+    auditorium = get_object_or_404(Auditorium, pk=auditorium_id)
+
+    if request.method == 'POST':
+        # Delete the auditorium
+        auditorium.delete()
+        # Redirect to list_auditoriums view
+        return redirect('list_auditoriums')
+
+    # If request method is not POST, redirect to list_auditoriums view
+    return redirect('list_auditoriums')
+
+

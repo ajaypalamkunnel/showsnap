@@ -20,7 +20,16 @@ urlpatterns = [
     path('add_movie/', views.add_movie, name='add_movie'),
     path('add_auditorium/', views.add_auditorium, name='add_auditorium'),
     path('schedule_show/', views.schedule_show, name='schedule_show'),
-    path('view_tickets/', views.view_tickets, name='view_tickets')
+    path('view_tickets/', views.view_tickets, name='view_tickets'),
+    path('list_movies/', views.list_movies, name='list_movies'),
+    path('delete_movie/<int:movie_id>/', views.delete_movie, name='delete_movie'),
+    path('show_list/', views.show_list, name='show_list'),
+    path('delete_screening/<int:screening_id>/', views.delete_screening, name='delete_screening'),
+    path('list_screenings/', views.list_screenings, name='list_screenings'),
+    path('list_auditoriums/', views.list_auditoriums, name='list_auditoriums'),
+    path('delete_auditorium/<int:auditorium_id>/', views.delete_auditorium, name='delete_auditorium'),
+
+     
     #path('home/',views.film_listing,name='home')
     
 ]
